@@ -19,12 +19,20 @@ public class Player {
 
         this.userName = userName;
     }
-    public String getName () {
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
         return userName;
     }
-    public void setName (String userName) {
 
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 }
