@@ -13,10 +13,15 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository,GameRepository gameRepository) {
 		return (args) -> {
-			repository.save(new Player("Player 1"));
-			repository.save(new Player("Player 2"));
+			playerRepository.save(new Player("Player 1"));
+			playerRepository.save(new Player("Player 2"));
+			gameRepository.save(new Game());
+			gameRepository.save(new Game());
+			gameRepository.save(new Game());
 		};
 	}
-}
+
+	}
+

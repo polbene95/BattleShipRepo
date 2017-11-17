@@ -1,27 +1,29 @@
 package salvo.salvo;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class Player {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String userName = "";
+    private Date date;
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
     public void addGamePlayer (GamePlayer gamePlayer) {
-        gamePlayer.setPlayer(this);
+        gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
     }
-    public Player () { }
 
-    public Player (String userName) {
-        this.userName = userName;
+    public Game () {}
+    public Game (Date date) {
+        this.date = date;
+
     }
 
     public long getId() {
@@ -32,13 +34,11 @@ public class Player {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public Date getDate() {
+        return date;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setDate(Date date) {
+        this.date = date;
     }
-
-    }
-
+}
