@@ -1,8 +1,13 @@
 package salvo.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class Game {
@@ -19,6 +24,9 @@ public class Game {
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
     }
+    public List<Player> getPlayers () {
+        return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
+    }
 
     public Game () {}
     public Game (Date date) {
@@ -28,10 +36,6 @@ public class Game {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public Date getDate() {
