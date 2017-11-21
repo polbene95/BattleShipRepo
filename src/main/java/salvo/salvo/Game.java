@@ -28,9 +28,8 @@ public class Game {
         return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
     }
 
-    public Game () {}
-    public Game (Date date) {
-        this.date = date;
+    public Game () {
+        this.date = new Date();
 
     }
 

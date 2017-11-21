@@ -3,8 +3,9 @@ package salvo.salvo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -24,6 +25,7 @@ public class Player {
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
+
     public void addGamePlayer (GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);
         gamePlayers.add(gamePlayer);
