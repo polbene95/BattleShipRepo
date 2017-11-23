@@ -1,7 +1,10 @@
 package salvo.salvo;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 public class GamePlayer {
@@ -18,11 +21,21 @@ public class GamePlayer {
     @JoinColumn(name = "game_id")
     private Game game;
 
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    Set<Ship> ships;
+
+    public void addShips (Ship ship) {
+        ship.setGamePlayer(this);
+        ships.add(ship);
+    }
+
+
     public GamePlayer () {
     }
     public GamePlayer (Player player, Game game) {
         this.player = player;
         this.game = game;
+
     }
 
     public long getId() {
@@ -43,5 +56,9 @@ public class GamePlayer {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Set<Ship> getShips() {
+        return ships;
     }
 }

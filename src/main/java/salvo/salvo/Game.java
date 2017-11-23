@@ -17,15 +17,16 @@ public class Game {
     private long id;
     private Date date;
 
+    public List<Player> getPlayers () {
+        return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
+    }
+
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
     public void addGamePlayer (GamePlayer gamePlayer) {
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
-    }
-    public List<Player> getPlayers () {
-        return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
     }
 
     public Game () {
