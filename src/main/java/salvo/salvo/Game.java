@@ -44,4 +44,9 @@ public class Game {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
+    }
+
 }
