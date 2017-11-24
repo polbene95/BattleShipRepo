@@ -39,9 +39,11 @@ public class SalvoApplication {
 			List<String> loc1 = Arrays.asList("H2", "H3");
 			List<String> loc2 = Arrays.asList("H3", "H4");
 			List<String> loc3 = Arrays.asList("H5", "H6");
+			Ship s0 = shipRepository.save(new Ship());
 			Ship s1 = shipRepository.save(new Ship("cruiser", loc1, gp1));
-			Ship s2 = shipRepository.save(new Ship("destructor",loc2, gp2));
-			Ship s3 = shipRepository.save(new Ship("boat",loc3,gp3));
+			Ship s2 = shipRepository.save(new Ship("destructorDePussy 8=======D",loc2, gp1));
+			Ship s3 = shipRepository.save(new Ship("boat",loc3,gp1));
+//			gp2.addShips(s0);
 
 		};
 	}

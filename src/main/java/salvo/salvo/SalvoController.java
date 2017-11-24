@@ -2,6 +2,7 @@ package salvo.salvo;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @RestController
 @RequestMapping("/api")
@@ -17,11 +19,15 @@ public class SalvoController {
 
     @Autowired
     private GameRepository gameRepo;
+    @Autowired
     private PlayerRepository playerRepo;
+    @Autowired
     private GamePlayerRepository gamePlayerRepo;
+    @Autowired
+    private ShipRepository shipRepo;
 //
-    @RequestMapping("/games")
-        public List<Object> getGames() {
+    @RequestMapping("/game")
+          public List<Object> getGames() {
         //Queremos hacer un loop, pero el for no vale, uaremos un stream que e  si mismo tambien es un loop.
         //Para ello lo primero que haremos es busacr toda la infomacion de Games con .findAll().
         //Luego convertimos el gameRepo.findAll() en un stream, esté puede tener muchas funcionalidades como por ejemplo:
@@ -29,6 +35,7 @@ public class SalvoController {
         //Pongamos de ejemplo [1, 2, 3, 3], el map solo devolveria [1, 2, 3].
         //A esté le pasamos que la info que debe cojer la encontrara en la funcion gameInfo.
         //Para acabar hacemos un .collect(toList()) para volvero a convertir en lista.
+
         return gameRepo.findAll().stream()
                 .map(game -> gameInfo(game))
                 .collect(toList());
@@ -45,6 +52,9 @@ public class SalvoController {
         gameMap.put("gameplayers", gplayers.stream()
                                             .map(gamePlayer ->gamePlayerInfo(gamePlayer))
                                             .collect(toList()));
+        gameMap.put("ships", shipRepo.findAll().stream()
+                                    .map(ship -> shipInfo(ship))
+                                    .collect(toList()));
         return gameMap;
     }
     //Si nos fijamos bien siempre estamos haciendo lo mismo nesteando un stream en otra,
@@ -60,6 +70,21 @@ public class SalvoController {
         playerMap.put("id", player.getId());
         playerMap.put("email", player.getUserName());
         return playerMap;
+    }
+    public Map<String,Object> shipInfo (Ship ship) {
+        Map<String,Object> shipMap = new LinkedHashMap<>();
+        shipMap.put("type", ship.getType());
+        shipMap.put("location", ship.getLoactions());
+        return shipMap;
+    }
+    @RequestMapping("/game_view/{gamePlayerId}")
+    public Map<String,Object> getGameMap (@PathVariable Long gamePlayerId) {
+        Map<String,Object> gamePlayerIdMap = gameInfo(gamePlayerRepo.getOne(gamePlayerId).getGame());
+        if (gamePlayerId != null) {
+            return gamePlayerIdMap;
+        }else {
+            return null;
+        }
     }
 }
 
