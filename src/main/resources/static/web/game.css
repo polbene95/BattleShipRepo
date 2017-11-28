@@ -2,13 +2,19 @@
     display: flex;
     justify-content: center;
 }
-
+#players {
+    display: flex;
+    justify-content: space-around;
+}
+h2 {
+    margin-right: 1%;
+}
 .table-div {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
 }
 
-#table-grid {}
+#table-grid-your {}
 
 table {
     border-spacing: 0;
@@ -33,17 +39,9 @@ td:hover {
     background-color: aquamarine;
 }
 .ship-location {
-    background-color: blue;
+    background-color: brown;
+    color: transparent;
 }
-.boat-location {
-    background-color: blue;
-    color: black;
-}
-.cruiser-location {
-    background-color: orangered;
-    color: black;
-}
-.destructor-location {
-    background-color: red;
+.ship-location: hover {
     color: black;
 }
