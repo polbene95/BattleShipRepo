@@ -52,9 +52,6 @@ public class SalvoController {
         gameMap.put("gameplayers", gplayers.stream()
                                             .map(gamePlayer ->gamePlayerInfo(gamePlayer))
                                             .collect(toList()));
-        gameMap.put("ships", shipRepo.findAll().stream()
-                                    .map(ship -> shipInfo(ship))
-                                    .collect(toList()));
         return gameMap;
     }
     //Si nos fijamos bien siempre estamos haciendo lo mismo nesteando un stream en otra,
@@ -71,6 +68,19 @@ public class SalvoController {
         playerMap.put("email", player.getUserName());
         return playerMap;
     }
+    public Map<String, Object> gameViewInfo(GamePlayer gamePlayer){
+        Map<String , Object> gameMap = new LinkedHashMap<>();
+        gameMap.put("id", gamePlayer.getGame().getId());
+        gameMap.put("gpid", gamePlayer.getId());
+        gameMap.put("created", gamePlayer.getGame().getDate());
+        gameMap.put("gameplayers", gamePlayer.getGame().getGamePlayers().stream()
+                .map(gp ->gamePlayerInfo(gp))
+                .collect(toList()));
+        gameMap.put("ships", gamePlayer.getShips().stream()
+                .map(ship -> shipInfo(ship))
+                .collect(toList()));
+        return gameMap;
+    }
     public Map<String,Object> shipInfo (Ship ship) {
         Map<String,Object> shipMap = new LinkedHashMap<>();
         shipMap.put("type", ship.getType());
@@ -79,7 +89,7 @@ public class SalvoController {
     }
     @RequestMapping("/game_view/{gamePlayerId}")
     public Map<String,Object> getGameMap (@PathVariable Long gamePlayerId) {
-        Map<String,Object> gamePlayerIdMap = gameInfo(gamePlayerRepo.getOne(gamePlayerId).getGame());
+        Map<String,Object> gamePlayerIdMap = gameViewInfo(gamePlayerRepo.getOne(gamePlayerId));
         if (gamePlayerId != null) {
             return gamePlayerIdMap;
         }else {

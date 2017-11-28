@@ -37,14 +37,18 @@ public class SalvoApplication {
 			GamePlayer gp6 = gamePlayerRepository.save(new GamePlayer(p2, g3));
 
 			List<String> loc1 = Arrays.asList("H2", "H3");
-			List<String> loc2 = Arrays.asList("H3", "H4");
-			List<String> loc3 = Arrays.asList("H5", "H6");
-			Ship s0 = shipRepository.save(new Ship());
-			Ship s1 = shipRepository.save(new Ship("cruiser", loc1, gp1));
-			Ship s2 = shipRepository.save(new Ship("destructorDePussy 8=======D",loc2, gp1));
-			Ship s3 = shipRepository.save(new Ship("boat",loc3,gp1));
-//			gp2.addShips(s0);
+			List<String> loc2 = Arrays.asList("B3", "C3", "D3");
+			List<String> loc3 = Arrays.asList("G5");
+			List<String> loc4 = Arrays.asList("H1", "H2");
+			List<String> loc5 = Arrays.asList("H4", "H5");
+			List<String> loc6 = Arrays.asList("H6", "H7");
 
+			Ship s1 = shipRepository.save(new Ship("cruiser", loc1, gp1));
+			Ship s2 = shipRepository.save(new Ship("destructor",loc2, gp1));
+			Ship s3 = shipRepository.save(new Ship("boat",loc3,gp1));
+			Ship s4 = shipRepository.save(new Ship("cruiser", loc4, gp2));
+//			Ship s5 = shipRepository.save(new Ship("destructor",loc5, gp2));
+//			Ship s6 = shipRepository.save(new Ship("boat",loc6,gp2));
 		};
 	}
 }
