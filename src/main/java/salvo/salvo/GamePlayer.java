@@ -1,5 +1,7 @@
 package salvo.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +40,10 @@ public class GamePlayer {
         this.player = player;
         this.game = game;
 
+    }
+    @JsonIgnore
+    public Score getScore () {
+        return player.getScore(game);
     }
 
     public long getId() {

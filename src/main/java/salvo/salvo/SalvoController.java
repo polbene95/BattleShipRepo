@@ -27,8 +27,10 @@ public class SalvoController {
     private ShipRepository shipRepo;
     @Autowired
     private SalvoRepository salvoRepo;
-//
-    @RequestMapping("/game")
+    @Autowired
+    private ScoreRepository scoreRepo;
+
+    @RequestMapping("/games")
           public List<Object> getGames() {
         //Queremos hacer un loop, pero el for no vale, uaremos un stream que e  si mismo tambien es un loop.
         //Para ello lo primero que haremos es busacr toda la infomacion de Games con .findAll().
@@ -52,7 +54,7 @@ public class SalvoController {
         gameMap.put("id", game.getId());
         gameMap.put("created", game.getDate());
         gameMap.put("gameplayers", gplayers.stream()
-                                            .map(gamePlayer ->gamePlayerInfo(gamePlayer))
+                                            .map(gp->gamePlayerInfo(gp))
                                             .collect(toList()));
         return gameMap;
     }
@@ -62,14 +64,22 @@ public class SalvoController {
         Map<String, Object> gamePlayerMap = new LinkedHashMap<>();
         gamePlayerMap.put("id", gplayer.getId());
         gamePlayerMap.put("player", playerInfo(gplayer.getPlayer()));
+        gamePlayerMap.put("score", gplayer.getScore().getScore());
         return gamePlayerMap;
     }
     public Map<String, Object> playerInfo (Player player) {
         Map<String, Object> playerMap = new LinkedHashMap<>();
         playerMap.put("id", player.getId());
         playerMap.put("email", player.getUserName());
+
         return playerMap;
     }
+//    public Map<String, Object> scoreInfo (Score score) {
+//        Map<String,Object> scoreMap = new LinkedHashMap<>();
+//        scoreMap.put("score", score.getScore());
+//        return scoreMap;
+//    }
+
     public Map<String, Object> gameViewInfo(GamePlayer gamePlayer){
         Map<String , Object> gameMap = new LinkedHashMap<>();
         gameMap.put("id", gamePlayer.getGame().getId());
@@ -93,14 +103,10 @@ public class SalvoController {
         return shipMap;
     }
     public List<Object> salvoInfo (GamePlayer gamePlayer) {
-
         Set<Salvo> salvos = gamePlayer.getSalvos();
-
         List<Object> listSalvo = new ArrayList<>();
-
         for (Salvo salvo : salvos) {
             Map<String,Object> salvoMap = new LinkedHashMap<>();
-
             salvoMap.put("player",salvo.getGamePlayer().getId());
             salvoMap.put("turn",salvo.getTurn());
             salvoMap.put("location",salvo.getLocations());

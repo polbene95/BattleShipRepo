@@ -1,0 +1,60 @@
+.title {
+    display: flex;
+    justify-content: center;
+}
+#players {
+    display: flex;
+    justify-content: space-around;
+}
+h2 {
+    margin-right: 1%;
+}
+.table-div {
+    display: flex;
+    justify-content: space-around;
+}
+
+#table-grid-your {}
+
+table {
+    border-spacing: 0;
+}
+
+tr {
+    display: flex;
+    justify-content: space-around;
+}
+
+td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-style: ridge;
+    color: lightblue;
+}
+td:hover {
+    color: black;
+    background-color: aquamarine;
+}
+.ship-location {
+    background-color: brown;
+    color: transparent;
+}
+.ship-location: hover {
+    color: black;
+}
+
+.shotted{
+    background: blue;
+    color: transparent;
+}
+.succ-Shot {
+    background: red;
+    color: transparent;
+}
+.fail-Shot {
+    background: blue;
+    color: transparent;
+}

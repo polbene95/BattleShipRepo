@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -18,7 +19,7 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository,GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository,GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
 		return (args) -> {
 			Player p1 = playerRepository.save(new Player("j.bauer@ctu.gov"));
 			Player p2 = playerRepository.save(new Player("c.obrian@ctu.gov"));
@@ -31,9 +32,9 @@ public class SalvoApplication {
 
 			GamePlayer gp1 = gamePlayerRepository.save(new GamePlayer(p1, g1));
 			GamePlayer gp2 = gamePlayerRepository.save(new GamePlayer(p2, g1));
-			GamePlayer gp3 = gamePlayerRepository.save(new GamePlayer(p3, g2));
+			GamePlayer gp3 = gamePlayerRepository.save(new GamePlayer(p1, g2));
 			GamePlayer gp4 = gamePlayerRepository.save(new GamePlayer(p2, g2));
-			GamePlayer gp5 = gamePlayerRepository.save(new GamePlayer(p4, g3));
+			GamePlayer gp5 = gamePlayerRepository.save(new GamePlayer(p1, g3));
 			GamePlayer gp6 = gamePlayerRepository.save(new GamePlayer(p2, g3));
 
 			List<String> loc1 = Arrays.asList("H2", "H3");
@@ -59,6 +60,13 @@ public class SalvoApplication {
 			Ship s4 = shipRepository.save(new Ship("cruiser", loc4, gp2));
 //			Ship s5 = shipRepository.save(new Ship("destructor",loc5, gp2));
 //			Ship s6 = shipRepository.save(new Ship("boat",loc6,gp2));
+
+			Score scoreGP1 = scoreRepository.save(new Score(1,p1, g1));
+			Score scoreGP2 = scoreRepository.save(new Score(0,p2, g1));
+			Score scoreGP3 = scoreRepository.save(new Score(0.5,p1, g2));
+			Score scoreGP4 = scoreRepository.save(new Score(0.5,p2, g2));
+			Score scoreGP5 = scoreRepository.save(new Score(0,p1, g3));
+			Score scoreGP6 = scoreRepository.save(new Score(1,p2, g3));
 		};
 	}
 }
