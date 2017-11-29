@@ -45,3 +45,16 @@ td:hover {
 .ship-location: hover {
     color: black;
 }
+
+.shotted{
+    background: blue;
+    color: transparent;
+}
+.succ-Shot {
+    background: red;
+    color: transparent;
+}
+.fail-Shot {
+    background: blue;
+    color: transparent;
+}

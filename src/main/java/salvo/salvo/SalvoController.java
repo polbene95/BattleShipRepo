@@ -25,6 +25,8 @@ public class SalvoController {
     private GamePlayerRepository gamePlayerRepo;
     @Autowired
     private ShipRepository shipRepo;
+    @Autowired
+    private SalvoRepository salvoRepo;
 //
     @RequestMapping("/game")
           public List<Object> getGames() {
@@ -79,6 +81,9 @@ public class SalvoController {
         gameMap.put("ships", gamePlayer.getShips().stream()
                 .map(ship -> shipInfo(ship))
                 .collect(toList()));
+        gameMap.put("salvos", gamePlayer.getGame().getGamePlayers().stream()
+                .map(gp -> salvoInfo(gp))
+                .collect(toList()));
         return gameMap;
     }
     public Map<String,Object> shipInfo (Ship ship) {
@@ -86,6 +91,22 @@ public class SalvoController {
         shipMap.put("type", ship.getType());
         shipMap.put("location", ship.getLoactions());
         return shipMap;
+    }
+    public List<Object> salvoInfo (GamePlayer gamePlayer) {
+
+        Set<Salvo> salvos = gamePlayer.getSalvos();
+
+        List<Object> listSalvo = new ArrayList<>();
+
+        for (Salvo salvo : salvos) {
+            Map<String,Object> salvoMap = new LinkedHashMap<>();
+
+            salvoMap.put("player",salvo.getGamePlayer().getId());
+            salvoMap.put("turn",salvo.getTurn());
+            salvoMap.put("location",salvo.getLocations());
+            listSalvo.add(salvoMap);
+        }
+        return listSalvo;
     }
     @RequestMapping("/game_view/{gamePlayerId}")
     public Map<String,Object> getGameMap (@PathVariable Long gamePlayerId) {

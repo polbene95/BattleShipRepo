@@ -4,10 +4,11 @@ $(document).ready(function () {
         console.log(data);
         crateGrid();
         displayPlayers();
+        displaySalvos();
     });
 });
 
-
+// Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
 function crateGrid() {
     var yourGrid = document.getElementById("table-grid-your");
     var enemyGrid = document.getElementById("table-grid-enemy");
@@ -57,7 +58,34 @@ function displayPlayers() {
     playersDiv.appendChild(h2You);
     playersDiv.appendChild(h2Enemy);
 
-    console.log(playerYou);
-    console.log(playerEnemy);
-    console.log(data.gpid);
+    //    console.log(playerYou);
+    //    console.log(playerEnemy);
+    //    console.log(data.gpid);
+}
+
+function displaySalvos() {
+    var salvos = data.salvos;
+    for (i = 0; i < salvos.length; i++) {
+        for (j = 0; j < salvos[i].length; j++) {
+            var slavoLocation = salvos[i][j].location;
+            for (k = 0; k < slavoLocation.length; k++) {
+                if (salvos[i][j].player == data.gpid) {
+                    var myShots = slavoLocation[k];
+                    $("#E"+myShots).addClass("shotted");
+                    console.log(myShots);
+                }
+                if (salvos[i][j].player !== data.gpid) {
+                    var enemyShot = slavoLocation[k];
+                    if ($("#U"+enemyShot).hasClass("ship-location")) {
+                        $("#U"+enemyShot).addClass("succ-Shot");
+                    } 
+                    if (!$("#U"+enemyShot).hasClass("ship-location")) {
+                        $("#U"+enemyShot).addClass("fail-Shot")
+                    }
+                   
+                }
+            }
+        }
+        console.log(slavoLocation);
+    }
 }

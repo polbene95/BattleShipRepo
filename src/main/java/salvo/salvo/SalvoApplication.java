@@ -18,7 +18,7 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 	@Bean
-	public CommandLineRunner initData(PlayerRepository playerRepository,GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository) {
+	public CommandLineRunner initData(PlayerRepository playerRepository,GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
 		return (args) -> {
 			Player p1 = playerRepository.save(new Player("j.bauer@ctu.gov"));
 			Player p2 = playerRepository.save(new Player("c.obrian@ctu.gov"));
@@ -42,6 +42,16 @@ public class SalvoApplication {
 			List<String> loc4 = Arrays.asList("H1", "H2");
 			List<String> loc5 = Arrays.asList("H4", "H5");
 			List<String> loc6 = Arrays.asList("H6", "H7");
+
+			List<String> salvoLoc1 = Arrays.asList("H1","B5","G7");
+			List<String> salvoLoc2 = Arrays.asList("A8","A7","A6");
+			List<String> salvoLoc3 = Arrays.asList("D4","I1","E8");
+			List<String> salvoLoc4 = Arrays.asList("B3","C3","D3");
+
+			Salvo salvo1 = salvoRepository.save(new Salvo(salvoLoc1, gp1, 1));
+			Salvo salvo2 = salvoRepository.save(new Salvo(salvoLoc2, gp2, 1));
+			Salvo salvo3 = salvoRepository.save(new Salvo(salvoLoc3, gp1, 2));
+			Salvo salvo4 = salvoRepository.save(new Salvo(salvoLoc4, gp2, 2));
 
 			Ship s1 = shipRepository.save(new Ship("cruiser", loc1, gp1));
 			Ship s2 = shipRepository.save(new Ship("destructor",loc2, gp1));
