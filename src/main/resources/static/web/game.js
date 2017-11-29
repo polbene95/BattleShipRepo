@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    $.getJSON("http://localhost:8080/api/game_view/1", function (json) {
+    var gpID = getURL();
+    $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
         data = json;
         console.log(data);
         crateGrid();
@@ -7,6 +8,10 @@ $(document).ready(function () {
         displaySalvos();
     });
 });
+function getURL() {
+    var myGamePlayer = window.location.search.split("&")[0].split("=")[1];
+    return myGamePlayer;
+}
 
 // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
 function crateGrid() {
