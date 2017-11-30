@@ -1,0 +1,21 @@
+.title {
+    display: flex;
+    justify-content: center;
+}
+tr {
+    display: flex;
+    justify-content: space-around;
+}
+
+td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 170px;
+    height: 50px;
+    border-style: ridge;
+}
+.body {
+    display: flex;
+    justify-content: center;
+}

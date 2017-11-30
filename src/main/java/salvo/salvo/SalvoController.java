@@ -30,6 +30,29 @@ public class SalvoController {
     @Autowired
     private ScoreRepository scoreRepo;
 
+    @RequestMapping("/leaderboard")
+    public List<Object> getLeaderBoard () {
+        return playerRepo.findAll().stream()
+                                    .map(p -> playerInfo2(p))
+                                    .collect(toList());
+    }
+    public Map<String, Object> gamePlayerInfo2 (GamePlayer gplayer) {
+        Map<String, Object> gamePlayerMap = new LinkedHashMap<>();
+//        gamePlayerMap.put("id", gplayer.getId());
+//        gamePlayerMap.put("player", playerInfo(gplayer.getPlayer()));
+        gamePlayerMap.put("score", gplayer.getScore().getScore());
+        return gamePlayerMap;
+    }
+    public Map<String, Object> playerInfo2 (Player player) {
+        Set<GamePlayer> gplayers = player.getGamePlayers();
+        Map<String, Object> playerMap = new LinkedHashMap<>();
+        playerMap.put("id", player.getId());
+        playerMap.put("email", player.getUserName());
+        playerMap.put("gameplayers" ,gplayers.stream()
+                                        .map(gp->gamePlayerInfo2(gp))
+                                        .collect(toList()));
+        return playerMap;
+    }
     @RequestMapping("/games")
           public List<Object> getGames() {
         //Queremos hacer un loop, pero el for no vale, uaremos un stream que e  si mismo tambien es un loop.
@@ -74,11 +97,6 @@ public class SalvoController {
 
         return playerMap;
     }
-//    public Map<String, Object> scoreInfo (Score score) {
-//        Map<String,Object> scoreMap = new LinkedHashMap<>();
-//        scoreMap.put("score", score.getScore());
-//        return scoreMap;
-//    }
 
     public Map<String, Object> gameViewInfo(GamePlayer gamePlayer){
         Map<String , Object> gameMap = new LinkedHashMap<>();

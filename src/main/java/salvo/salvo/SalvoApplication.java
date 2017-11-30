@@ -35,7 +35,7 @@ public class SalvoApplication {
 			GamePlayer gp3 = gamePlayerRepository.save(new GamePlayer(p1, g2));
 			GamePlayer gp4 = gamePlayerRepository.save(new GamePlayer(p2, g2));
 			GamePlayer gp5 = gamePlayerRepository.save(new GamePlayer(p1, g3));
-			GamePlayer gp6 = gamePlayerRepository.save(new GamePlayer(p2, g3));
+			GamePlayer gp6 = gamePlayerRepository.save(new GamePlayer(p3, g3));
 
 			List<String> loc1 = Arrays.asList("H2", "H3");
 			List<String> loc2 = Arrays.asList("B3", "C3", "D3");
@@ -63,10 +63,11 @@ public class SalvoApplication {
 
 			Score scoreGP1 = scoreRepository.save(new Score(1,p1, g1));
 			Score scoreGP2 = scoreRepository.save(new Score(0,p2, g1));
-			Score scoreGP3 = scoreRepository.save(new Score(0.5,p1, g2));
-			Score scoreGP4 = scoreRepository.save(new Score(0.5,p2, g2));
-			Score scoreGP5 = scoreRepository.save(new Score(0,p1, g3));
-			Score scoreGP6 = scoreRepository.save(new Score(1,p2, g3));
+			Score scoreGP3 = scoreRepository.save(new Score(1,p1, g2));
+			Score scoreGP4 = scoreRepository.save(new Score(0,p2, g2));
+			Score scoreGP5 = scoreRepository.save(new Score(0.5,p1, g3));
+			Score scoreGP6 = scoreRepository.save(new Score(0.5,p3, g3));
+
 		};
 	}
 }

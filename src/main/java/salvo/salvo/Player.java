@@ -58,6 +58,7 @@ public class Player {
         this.userName = userName;
     }
 
+    @JsonIgnore
     public Set<Score> getScores() {
         return scores;
     }
