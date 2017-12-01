@@ -2,6 +2,7 @@ $(document).ready(function () {
     $.getJSON("http://localhost:8080/api/leaderboard", function (json) {
         data = json;
         printList();
+        $('#rank-table').DataTable();
     });
 });
 
@@ -22,6 +23,8 @@ function printList() {
             var col = document.createElement("td");
             var email = data[i].email;
             var score = data[i].gameplayers[j].score;
+            
+            
             totalScore += score;
             if (score == 1) {
                 winArr.push(score);
@@ -39,9 +42,7 @@ function printList() {
             row.insertCell().innerHTML = totalScore;
             row.insertCell().innerHTML = winNum;
             row.insertCell().innerHTML = loseNum;
-            row.insertCell().innerHTML = tieNum;
-
-            
+            row.insertCell().innerHTML = tieNum; 
         }
         console.log(score);
         tbody.append(row);
@@ -50,6 +51,7 @@ function printList() {
     console.log(loseArr);
     console.log(tieArr);
 }
+
 
 //        var olMain = document.createElement("ol");
 //        var olGamePlayers = document.createElement("ol");

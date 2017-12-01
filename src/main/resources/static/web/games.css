@@ -1,3 +1,19 @@
+#rank-table_info.datatables_info {
+    display: none;
+}
+#rank-table_filter.datatables_length {
+    display: none;
+}
+#rank-table_paginate {
+    display: none;
+}
+#rank-table_length{
+    display: none;
+}
+table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting {
+     padding-right: 0; 
+}
+
 .title {
     display: flex;
     justify-content: center;
@@ -14,6 +30,7 @@ td {
     width: 170px;
     height: 50px;
     border-style: ridge;
+    padding: 0;
 }
 .body {
     display: flex;

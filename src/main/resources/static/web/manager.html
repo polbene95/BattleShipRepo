@@ -8,11 +8,22 @@
 <body>
     <h1>Player Manager</h1>
 
+    <!--
     <form action="" onsubmit="return false">
         <label>Email User Name [e.g., alice@aol.com]: <input id="email" type="text" size="30"></label>
         <button id="add_player">Add</button>
         <br>
         <pre id="output"></pre>
+    </form>
+-->
+    <form id="login-form" onsubmit="return false">
+        <label>Name: <input type="text" name="username"></label>
+        <label>Password: <input type="text" name="password"></label>
+        <button>Log in</button>
+    </form>
+
+    <form id="logout-form" onsubmit="return false">
+        <button>Log out</button>
     </form>
 
 
