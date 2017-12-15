@@ -56,5 +56,4 @@ public class Game {
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
-
 }

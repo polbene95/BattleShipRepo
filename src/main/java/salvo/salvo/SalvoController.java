@@ -2,16 +2,15 @@ package salvo.salvo;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+
 
 @RestController
 @RequestMapping("/api")
@@ -36,14 +35,12 @@ public class SalvoController {
                                     .map(p -> playerInfo2(p))
                                     .collect(toList());
     }
-    public Map<String, Object> gamePlayerInfo2 (GamePlayer gplayer) {
+    private Map<String, Object> gamePlayerInfo2 (GamePlayer gplayer) {
         Map<String, Object> gamePlayerMap = new LinkedHashMap<>();
-//        gamePlayerMap.put("id", gplayer.getId());
-//        gamePlayerMap.put("player", playerInfo(gplayer.getPlayer()));
         gamePlayerMap.put("score", gplayer.getScore().getScore());
         return gamePlayerMap;
     }
-    public Map<String, Object> playerInfo2 (Player player) {
+    private Map<String, Object> playerInfo2 (Player player) {
         Set<GamePlayer> gplayers = player.getGamePlayers();
         Map<String, Object> playerMap = new LinkedHashMap<>();
         playerMap.put("id", player.getId());
@@ -53,8 +50,29 @@ public class SalvoController {
                                         .collect(toList()));
         return playerMap;
     }
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> createPlayer (String userName, String password) {
+        if (userName.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error","No Name"), HttpStatus.FORBIDDEN);
+        }
+        if (password.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error","No Password"), HttpStatus.FORBIDDEN);
+        }
+        List<Player> players = playerRepo.findByUserName(userName);
+        if (!players.isEmpty()) {
+            return new ResponseEntity<>(makeMap("error","Existing User"), HttpStatus.CONFLICT);
+        }
+        Player player = playerRepo.save(new Player(userName, password));
+        return new ResponseEntity<>(makeMap("id", player.getId()), HttpStatus.CREATED);
+
+    }
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
     @RequestMapping("/games")
-          public List<Object> getGames() {
+    public Map<String,Object> getGames(Authentication authentication) {
         //Queremos hacer un loop, pero el for no vale, uaremos un stream que e  si mismo tambien es un loop.
         //Para ello lo primero que haremos es busacr toda la infomacion de Games con .findAll().
         //Luego convertimos el gameRepo.findAll() en un stream, esté puede tener muchas funcionalidades como por ejemplo:
@@ -63,42 +81,49 @@ public class SalvoController {
         //A esté le pasamos que la info que debe cojer la encontrara en la funcion gameInfo.
         //Para acabar hacemos un .collect(toList()) para volvero a convertir en lista.
 
-        return gameRepo.findAll().stream()
-                .map(game -> gameInfo(game))
-                .collect(toList());
+        Map<String,Object> gameMap = new LinkedHashMap<>();
+        if (authentication != null) {
+            gameMap.put("player", authentication.getName());
+            gameMap.put("games", gameRepo.findAll().stream()
+                    .map(game -> gameInfo(game))
+                    .collect(toList()));
+
+        } else {
+            gameMap.put("Error", "No authentication");
+        }
+        return gameMap;
     }
-    //Este metodo Map nos generara el Mapa de String y Objetos que necesitamos, le decimos que depende de la Clase Game.
-    //Y le decimos que debe cojer cierta información del getGamplePLay que le pusimos en la clase Game.
-    //Como hemos hecho hasta el momento le creamos un id, un date y le añadimos un gamePlayer.
-    //Este gamePlayer tambien sera un stream y haremos lo mismo en la funcion gamePlayInfo.
-    public Map<String, Object> gameInfo(Game game){
+    private Map<String, Object> gameInfo(Game game){
+        //Este metodo Map nos generara el Mapa de String y Objetos que necesitamos, le decimos que depende de la Clase Game.
+        //Y le decimos que debe cojer cierta información del getGamplePLay que le pusimos en la clase Game.
+        //Como hemos hecho hasta el momento le creamos un id, un date y le añadimos un gamePlayer.
+        //Este gamePlayer tambien sera un stream y haremos lo mismo en la funcion gamePlayInfo.
         Set<GamePlayer> gplayers = game.getGamePlayers();
         Map<String , Object> gameMap = new LinkedHashMap<>();
         gameMap.put("id", game.getId());
         gameMap.put("created", game.getDate());
         gameMap.put("gameplayers", gplayers.stream()
-                                            .map(gp->gamePlayerInfo(gp))
-                                            .collect(toList()));
+                .map(gp->gamePlayerInfo(gp))
+                .collect(toList()));
         return gameMap;
     }
-    //Si nos fijamos bien siempre estamos haciendo lo mismo nesteando un stream en otra,
-    // pero en lugar de hacerlo con lops lo hacemos con streams
-    public Map<String, Object> gamePlayerInfo (GamePlayer gplayer) {
+    private Map<String, Object> gamePlayerInfo (GamePlayer gplayer) {
+        //Si nos fijamos bien siempre estamos haciendo lo mismo nesteando un stream en otra,
+        // pero en lugar de hacerlo con lops lo hacemos con streams
         Map<String, Object> gamePlayerMap = new LinkedHashMap<>();
         gamePlayerMap.put("id", gplayer.getId());
         gamePlayerMap.put("player", playerInfo(gplayer.getPlayer()));
         gamePlayerMap.put("score", gplayer.getScore().getScore());
         return gamePlayerMap;
     }
-    public Map<String, Object> playerInfo (Player player) {
+    private Map<String, Object> playerInfo (Player player) {
         Map<String, Object> playerMap = new LinkedHashMap<>();
         playerMap.put("id", player.getId());
         playerMap.put("email", player.getUserName());
 
         return playerMap;
     }
-
-    public Map<String, Object> gameViewInfo(GamePlayer gamePlayer){
+    private Map<String, Object> gameViewInfo(GamePlayer gamePlayer){
         Map<String , Object> gameMap = new LinkedHashMap<>();
         gameMap.put("id", gamePlayer.getGame().getId());
         gameMap.put("gpid", gamePlayer.getId());
@@ -114,13 +139,13 @@ public class SalvoController {
                 .collect(toList()));
         return gameMap;
     }
-    public Map<String,Object> shipInfo (Ship ship) {
+    private Map<String,Object> shipInfo (Ship ship) {
         Map<String,Object> shipMap = new LinkedHashMap<>();
         shipMap.put("type", ship.getType());
         shipMap.put("location", ship.getLoactions());
         return shipMap;
     }
-    public List<Object> salvoInfo (GamePlayer gamePlayer) {
+    private List<Object> salvoInfo (GamePlayer gamePlayer) {
         Set<Salvo> salvos = gamePlayer.getSalvos();
         List<Object> listSalvo = new ArrayList<>();
         for (Salvo salvo : salvos) {

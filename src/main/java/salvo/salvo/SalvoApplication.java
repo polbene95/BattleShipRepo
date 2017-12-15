@@ -46,6 +46,7 @@ public class SalvoApplication {
 			Game g1 = gameRepository.save(new Game());
 			Game g2 = gameRepository.save(new Game());
 			Game g3 = gameRepository.save(new Game());
+			Game g4 = gameRepository.save(new Game());
 
 			GamePlayer gp1 = gamePlayerRepository.save(new GamePlayer(p1, g1));
 			GamePlayer gp2 = gamePlayerRepository.save(new GamePlayer(p2, g1));
@@ -53,6 +54,7 @@ public class SalvoApplication {
 			GamePlayer gp4 = gamePlayerRepository.save(new GamePlayer(p2, g2));
 			GamePlayer gp5 = gamePlayerRepository.save(new GamePlayer(p1, g3));
 			GamePlayer gp6 = gamePlayerRepository.save(new GamePlayer(p3, g3));
+//			GamePlayer gp7 = gamePlayerRepository.save(new GamePlayer(p4, g4));
 
 			List<String> loc1 = Arrays.asList("H2", "H3");
 			List<String> loc2 = Arrays.asList("B3", "C3", "D3");
@@ -125,17 +127,21 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/**").permitAll()
-				.antMatchers("/games.html").hasAnyAuthority("USER")
+				.antMatchers("/games.html").permitAll()
+				.antMatchers("/games.css").permitAll()
+				.antMatchers("/games.js").permitAll()
+				.antMatchers("/game.html").hasAuthority("USER")
+				.antMatchers("/game.css").hasAuthority("USER")
+				.antMatchers("/game.js").hasAuthority("USER")
 				.and()
 				.formLogin();
-//		hasAuthority("USER")
-		http.formLogin()
-				.usernameParameter("name")
-				.passwordParameter("pwd")
-				.loginPage("/app/login");
 
-		http.logout().logoutUrl("/app/logout");
+		http.formLogin()
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.loginPage("/api/login");
+
+		http.logout().logoutUrl("/api/logout");
 
 		// turn off checking for CSRF tokens
 		http.csrf().disable();
@@ -154,7 +160,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 		}
 	}
-
 }
 
 

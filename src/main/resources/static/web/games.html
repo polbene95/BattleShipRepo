@@ -11,9 +11,27 @@
 <body>
     <div class="container">
         <header>
+            <div class="login">
+                <div id="login-form">
+                    <label>Name: <input id="textname" type="text" name="username"></label>
+                    <label>Password: <input id="textpassword" type="text" name="password"></label>
+                    <button class="btn" type="button" id="loginbut" onclick="login()">Log in</button>
+                    <button class="btn" type="button" id="signinbut" onclick="signup()">Sign up</button>
+                </div>
+            </div>
+            <div class="logout">
+                <div id="logout-form">
+                    <div>
+                        <h3 id="welcome-txt"></h3>
+                    </div>
+                    <button type="button" class="btn" id="logoutbut" onclick="logout()">Log out</button>
+                </div>
+            </div>
+            
             <div class="title">
                 <h1>Rank Table</h1>
             </div>
+            
         </header>
         <div class="body">
             <table id="rank-table" class="table-bordered">
@@ -27,6 +45,19 @@
                     </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
+            </table>
+        </div>
+        <div class="body">
+            <table id="list-table" class="table-bordered">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Host</td>
+                        <td>Guest</td>
+                        <td>Games</td>
+                    </tr>
+                </thead>
+                <tbody id="list-info"></tbody>
             </table>
         </div>
     </div>

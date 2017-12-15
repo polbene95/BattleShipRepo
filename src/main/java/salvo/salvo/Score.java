@@ -28,31 +28,24 @@ public class Score {
         this.player = player;
         this.game = game;
     }
-
     public double getScore() {
         return score;
     }
-
     public void setScore(double score) {
         this.score = score;
     }
-
     public long getId() {
         return id;
     }
-
     public Player getPlayer() {
         return player;
     }
-
     public void setPlayer(Player player) {
         this.player = player;
     }
-
     public Game getGame() {
         return game;
     }
-
     public void setGame(Game game) {
         this.game = game;
     }

@@ -82,5 +82,6 @@ public class Player {
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
+
 }
 
