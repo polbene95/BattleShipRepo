@@ -80,18 +80,26 @@ public class SalvoController {
         //Pongamos de ejemplo [1, 2, 3, 3], el map solo devolveria [1, 2, 3].
         //A esté le pasamos que la info que debe cojer la encontrara en la funcion gameInfo.
         //Para acabar hacemos un .collect(toList()) para volvero a convertir en lista.
-
         Map<String,Object> gameMap = new LinkedHashMap<>();
         if (authentication != null) {
             gameMap.put("player", authentication.getName());
             gameMap.put("games", gameRepo.findAll().stream()
                     .map(game -> gameInfo(game))
                     .collect(toList()));
-
         } else {
             gameMap.put("Error", "No authentication");
         }
         return gameMap;
+    }
+    @RequestMapping( path = "/createGame", method = RequestMethod.POST)
+    private ResponseEntity<Map<String,Object>> createGamePlayer (Authentication authentication) {
+        String playerName = authentication.getName();
+        Player player = playerRepo.findByUserName(playerName).get(0);
+        Game newGame = gameRepo.save(new Game ());
+        GamePlayer gamePlayer = new GamePlayer(player, newGame);
+        gamePlayerRepo.save(gamePlayer);
+
+        return new ResponseEntity<>(makeMap("gpId",gamePlayer.getId()), HttpStatus.FORBIDDEN);
     }
     private Map<String, Object> gameInfo(Game game){
         //Este metodo Map nos generara el Mapa de String y Objetos que necesitamos, le decimos que depende de la Clase Game.

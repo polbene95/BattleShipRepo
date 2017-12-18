@@ -131,39 +131,57 @@ function printGameList() {
         for (j = 0; j < games[i].gameplayers.length; j++) {
             var row = document.createElement("tr");
             var col = document.createElement("td");
-            var button = document.createElement("button");
+            var button = document.createElement("a");
             button.setAttribute("type", "button");
 
             var gameId = games[i].id;
             var host = games[i].gameplayers[0].player.email;
             var guest = games[i].gameplayers[1].player.email;
             var gameplayers = games[i].gameplayers.length;
+            var gpIdHost = games[i].gameplayers[0].id;
+            var gpIdGuest = games[i].gameplayers[1].id;
 
             row.insertCell().innerHTML = gameId;
             row.insertCell().innerHTML = host;
             row.insertCell().innerHTML = guest;
             if (gameplayers == 2) {
-                if (host == user || guest == user) {
-                    button.setAttribute("class", "play");
+                if (host == user) {
+                    button.setAttribute("class", "play btn");
+                    button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdHost);
                     button.innerHTML = "PLAY";
-                    row.append(button);
+                } else if (guest == user) {
+                    button.setAttribute("class", "play btn");
+                    button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdGuest);
+                    button.innerHTML = "PLAY";
                 } else {
-                    button.innerHTML = "VIEW";
-                    row.append(button);
+                    button.setAttribute("class", "play btn");
+                    button.innerHTML = "IN GAME";
                 }
             }
             if (gameplayers == 1 && host == user) {
-                button.setAttribute("class", "play");
+                button.setAttribute("class", "play btn");
                 button.innerHTML = "PLAY";
-                row.append(button);
             }
             if (gameplayers == 1 && guest == user) {
                 button.innerHTML = "JOIN";
-                row.append(button);
             }
+                col.append(button);
+                row.append(col);
         }
         tbody.append(row);
     }
+}
+
+function createGame() {
+    $.post("/api/createGame", {
+        
+    })
+        .done(function () {
+        console.log("done")
+    })
+        .fail(function () {
+        console.log("fail") 
+    });
 }
 //
 //    var olMain = document.createElement("ol");

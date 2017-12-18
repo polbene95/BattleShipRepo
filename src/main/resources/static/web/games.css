@@ -1,29 +1,10 @@
-#rank-table_info.datatables_info {
+/*Data table extra info hided*/
+#rank-table_info.datatables_info, #list-table_info.datatables_info, #list-table_filter.datatables_length, #list-table_paginate, #list-table_length, #rank-table_filter.datatables_length, #rank-table_paginate, #rank-table_length, #rank-table_filter.datatables_length   {
     display: none;
 }
-#rank-table_filter.datatables_length {
-    display: none;
-}
-#rank-table_paginate {
-    display: none;
-}
-#rank-table_length{
-    display: none;
-}
+
 table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_desc, table.dataTable thead>tr>th.sorting, table.dataTable thead>tr>td.sorting_asc, table.dataTable thead>tr>td.sorting_desc, table.dataTable thead>tr>td.sorting {
      padding-right: 0; 
-}
-#list-table_info.datatables_info {
-    display: none;
-}
-#list-table_filter.datatables_length {
-    display: none;
-}
-#list-table_paginate {
-    display: none;
-}
-#list-table_length{
-    display: none;
 }
 
 .title {
@@ -32,7 +13,7 @@ table.dataTable thead>tr>th.sorting_asc, table.dataTable thead>tr>th.sorting_des
 }
 tr {
     display: flex;
-    justify-content: space-around;
+/*    justify-content: space-around;*/
 }
 
 td {
@@ -59,4 +40,11 @@ td {
 }
 #logoutbut {
     height: 34px;
+}
+.play {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
