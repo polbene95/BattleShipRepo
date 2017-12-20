@@ -46,7 +46,7 @@ public class SalvoApplication {
 			Game g1 = gameRepository.save(new Game());
 			Game g2 = gameRepository.save(new Game());
 			Game g3 = gameRepository.save(new Game());
-			Game g4 = gameRepository.save(new Game());
+//			Game g4 = gameRepository.save(new Game());
 
 			GamePlayer gp1 = gamePlayerRepository.save(new GamePlayer(p1, g1));
 			GamePlayer gp2 = gamePlayerRepository.save(new GamePlayer(p2, g1));
@@ -127,14 +127,14 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/games.html").permitAll()
-				.antMatchers("/games.css").permitAll()
-				.antMatchers("/games.js").permitAll()
-				.antMatchers("/game.html").hasAuthority("USER")
-				.antMatchers("/game.css").hasAuthority("USER")
-				.antMatchers("/game.js").hasAuthority("USER")
-				.and()
-				.formLogin();
+				.antMatchers("/web/games.html").permitAll()
+				.antMatchers("/web/games.css").permitAll()
+				.antMatchers("/web/games.js").permitAll()
+				.antMatchers("/api/leaderboard").permitAll()
+				.antMatchers("/api/players").permitAll()
+				.antMatchers("/api/createGame").permitAll()
+				.antMatchers("/rest").denyAll()
+				.anyRequest().fullyAuthenticated();
 
 		http.formLogin()
 				.usernameParameter("username")

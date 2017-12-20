@@ -37,7 +37,11 @@ public class SalvoController {
     }
     private Map<String, Object> gamePlayerInfo2 (GamePlayer gplayer) {
         Map<String, Object> gamePlayerMap = new LinkedHashMap<>();
-        gamePlayerMap.put("score", gplayer.getScore().getScore());
+        if(gplayer.getScore() != null) {
+            gamePlayerMap.put("score", gplayer.getScore().getScore());
+        } else {
+            gamePlayerMap.put("score", null);
+        }
         return gamePlayerMap;
     }
     private Map<String, Object> playerInfo2 (Player player) {
@@ -95,11 +99,22 @@ public class SalvoController {
     private ResponseEntity<Map<String,Object>> createGamePlayer (Authentication authentication) {
         String playerName = authentication.getName();
         Player player = playerRepo.findByUserName(playerName).get(0);
-        Game newGame = gameRepo.save(new Game ());
+        Game newGame = new Game();
+        gameRepo.save(newGame);
         GamePlayer gamePlayer = new GamePlayer(player, newGame);
         gamePlayerRepo.save(gamePlayer);
 
-        return new ResponseEntity<>(makeMap("gpId",gamePlayer.getId()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(makeMap("gpId",gamePlayer.getId()), HttpStatus.CREATED);
+    }
+    @RequestMapping(path = "/games/{gameId}/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> joinGame(@PathVariable Long gameId, Authentication authentication) {
+        String playerName = authentication.getName();
+        Player player = playerRepo.findByUserName(playerName).get(0);
+        Game newGameId = gameRepo.findOne(gameId);
+        GamePlayer gamePlayer = new GamePlayer(player, newGameId);
+        gamePlayerRepo.save(gamePlayer);
+
+        return new ResponseEntity<>(makeMap("gpId",gamePlayer.getId()), HttpStatus.CREATED);
     }
     private Map<String, Object> gameInfo(Game game){
         //Este metodo Map nos generara el Mapa de String y Objetos que necesitamos, le decimos que depende de la Clase Game.
@@ -121,7 +136,11 @@ public class SalvoController {
         Map<String, Object> gamePlayerMap = new LinkedHashMap<>();
         gamePlayerMap.put("id", gplayer.getId());
         gamePlayerMap.put("player", playerInfo(gplayer.getPlayer()));
-        gamePlayerMap.put("score", gplayer.getScore().getScore());
+        if(gplayer.getScore() != null) {
+            gamePlayerMap.put("score", gplayer.getScore().getScore());
+        } else {
+            gamePlayerMap.put("score", null);
+        }
         return gamePlayerMap;
     }
     private Map<String, Object> playerInfo (Player player) {

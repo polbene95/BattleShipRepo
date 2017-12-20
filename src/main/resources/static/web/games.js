@@ -5,15 +5,15 @@ $(document).ready(function () {
         printList();
         $('#rank-table').DataTable();
     });
-//    reloadApiGames();
     $("#list-table").hide();
+    reloadApiGames();
 });
-//window.onunload = logout();
+
 function reloadApiGames() {
     $.getJSON("http://localhost:8080/api/games", function (json) {
         data2 = json;
         printGameList();
-        //        $('#list-table').DataTable();
+        userLoged();
     })
 }
 
@@ -34,7 +34,6 @@ function printList() {
             var col = document.createElement("td");
             var email = data[i].email;
             var score = data[i].gameplayers[j].score;
-
 
             totalScore += score;
             if (score == 1) {
@@ -94,8 +93,8 @@ function logout() {
         .done(function () {
             $("#logout-form").hide();
             $("#login-form").show();
-            reloadApiGames();
             $("#list-table").hide();
+            reloadApiGames();
             location.reload();
         })
         .fail(function () {
@@ -125,8 +124,8 @@ function signup() {
 function printGameList() {
     console.log(data2);
     var tbody = document.getElementById("list-info");
-    var games = data2.games;
     var user = data2.player;
+    var games = data2.games;
     for (i = 0; i < games.length; i++) {
         for (j = 0; j < games[i].gameplayers.length; j++) {
             var row = document.createElement("tr");
@@ -134,137 +133,98 @@ function printGameList() {
             var button = document.createElement("a");
             button.setAttribute("type", "button");
 
+            var gameplayers = games[i].gameplayers.length;
             var gameId = games[i].id;
             var host = games[i].gameplayers[0].player.email;
-            var guest = games[i].gameplayers[1].player.email;
-            var gameplayers = games[i].gameplayers.length;
             var gpIdHost = games[i].gameplayers[0].id;
-            var gpIdGuest = games[i].gameplayers[1].id;
+            if (gameplayers == 2) {
+                var guest = games[i].gameplayers[1].player.email;
+                var gpIdGuest = games[i].gameplayers[1].id;
+            } else {
+                var guest = "Join if you want to play";
+                var gpIdGuest = null;
+            }
 
             row.insertCell().innerHTML = gameId;
             row.insertCell().innerHTML = host;
             row.insertCell().innerHTML = guest;
-            if (gameplayers == 2) {
-                if (host == user) {
+            if (guest != null) {
+                if (gameplayers == 2) {
+                    if (host == user) {
+                        button.setAttribute("class", "play btn");
+                        button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdHost);
+                        button.innerHTML = "PLAY";
+                    } else if (guest == user) {
+                        button.setAttribute("class", "play btn");
+                        button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdGuest);
+                        button.innerHTML = "PLAY";
+                    } else {
+                        button.setAttribute("class", "play btn");
+                        button.innerHTML = "IN GAME";
+                    }
+                }
+                if (gameplayers == 1 && host == user) {
                     button.setAttribute("class", "play btn");
                     button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdHost);
                     button.innerHTML = "PLAY";
-                } else if (guest == user) {
+                }
+                if (gameplayers == 1 && host !== user) {
                     button.setAttribute("class", "play btn");
-                    button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdGuest);
-                    button.innerHTML = "PLAY";
-                } else {
-                    button.setAttribute("class", "play btn");
-                    button.innerHTML = "IN GAME";
+                    //                    button.setAttribute("data-id", gameId);
+                    button.setAttribute("onclick", "joinGame(" + gameId + ")");
+                    button.innerHTML = "JOIN";
                 }
             }
-            if (gameplayers == 1 && host == user) {
-                button.setAttribute("class", "play btn");
-                button.innerHTML = "PLAY";
-            }
-            if (gameplayers == 1 && guest == user) {
-                button.innerHTML = "JOIN";
-            }
-                col.append(button);
-                row.append(col);
+            col.append(button);
+            row.append(col);
         }
         tbody.append(row);
     }
 }
 
 function createGame() {
-    $.post("/api/createGame", {
-        
-    })
+    var createGameButton = document.getElementById("create-game");
+    $.post("/api/createGame")
         .done(function () {
-        console.log("done")
-    })
+            var games = data2.games;
+            for (i = 0; i < games.length; i++) {
+                for (j = 0; j < games[i].gameplayers.length; j++) {
+                    var newGamePlayerId = games[games.length - 1].gameplayers[0].id;
+                    createGameButton.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + newGamePlayerId);
+                    console.log(newGamePlayerId);
+                }
+            }
+            location.reload();
+            console.log("done");
+
+        })
         .fail(function () {
-        console.log("fail") 
-    });
+            console.log("fail")
+        });
 }
-//
-//    var olMain = document.createElement("ol");
-//    var olGamePlayers = document.createElement("ol");
-//    var olPlayers1 = document.createElement("ol");
-//    var olPlayers2 = document.createElement("ol");
-//    var liId = document.createElement("li");
-//    var liCreated = document.createElement("li");
-//    var liGamePlayerId0 = document.createElement("li");
-//    var liGamePlayerId1 = document.createElement("li");
-//    var liPlayerId1 = document.createElement("li");
-//    var liPlayerId2 = document.createElement("li");
-//    var liPlayerEmail1 = document.createElement("li");
-//    var liPlayerEmail2 = document.createElement("li");
-//
-//
-//    var gameId = data[i].id;
-//    var gameCreated = data[i].created;
-//    var gameGamePlayerId0 = data[i].gameplayers[0].id;
-//    var gameGamePlayerId1 = data[i].gameplayers[1].id;
-//    var playerId1 = data[i].gameplayers[0].player.id;
-//    var playerId2 = data[i].gameplayers[1].player.id;
-//    var playerEmail1 = data[i].gameplayers[0].player.email;
-//    var playerEmail2 = data[i].gameplayers[1].player.email;
-//
-//    liId.innerHTML = gameId;
-//    liCreated.innerHTML = gameCreated;
-//    liGamePlayerId0.innerHTML = gameGamePlayerId0;
-//    liGamePlayerId1.innerHTML = gameGamePlayerId1;
-//    liPlayerId1.innerHTML = playerId1;
-//    liPlayerId2.innerHTML = playerId2;
-//    liPlayerEmail1.innerHTML = playerEmail1;
-//    liPlayerEmail2.innerHTML = playerEmail2;
-//
-//
-//    olPlayers1.append(liPlayerId1);
-//    olPlayers1.append(liPlayerEmail1);
-//    olPlayers2.append(liPlayerId2);
-//    olPlayers2.append(liPlayerEmail2);
-//    olMain.append(liId);
-//    olMain.append(liCreated);
-//    olMain.append(olGamePlayers);
-//    olGamePlayers.append(liGamePlayerId0);
-//    olGamePlayers.append(olPlayers1);
-//    olGamePlayers.append(liGamePlayerId1);
-//    olGamePlayers.append(olPlayers2);
-//    gameList.append(olMain);
-//
-//    var game = data[i];
-//    for (j = 0; j < game.gameplayers.length; j++) {
-//        var row = document.createElement("tr");
-//        var col = document.createElement("td");
-//        var gamePlayer = game.gameplayers[j];
-//        var email = gamePlayer.player.email;
-//        var score = gamePlayer.score;
-//        if (!emailArr.includes(email)) {
-//            emailArr.push(email);
-//            row.insertCell().innerHTML = email;
-//        }
-//        if (gamePlayer.player.id === 1) {
-//            console.log(score);
-//            totalScore += score;
-//            row.insertCell().innerHTML = totalScore;
-//            if (score === 1) {
-//                totalWin.push(score);
-//                var numWin = totalWin.length;
-//            }
-//            if (score === 0.5) {
-//                totalLose.push(score);
-//                var numLose = totalLose.length;
-//            }
-//            if (score === 0) {
-//                totalTie.push(score);
-//                var numTie = totalTie.length
-//            }
-//            row.insertCell().innerHTML = numWin;
-//            row.insertCell().innerHTML = numLose;
-//            row.insertCell().innerHTML = numTie;
-//
-//        }
-//        row.appendChild(col);
-//        tbody.appendChild(row);
-//    }
 
+function userLoged() {
+    var user = data2.player;
+    if (data2.player !== null) {
+        $("#login-form").hide();
+        $("#logout-form").show();
+        $("#list-table").show();
 
-//    console.log("totalScore", totalScore);
+        var nameTxt = document.getElementById("welcome-txt");
+        nameTxt.innerHTML = "Welcome " + user;
+    } else {
+        $("#logout-form").hide();
+        $("#login-form").show();
+        $("#list-table").hide();
+    }
+}
+
+function joinGame(gameId) {
+    $.post("/api/games/" + gameId + "/players", ).done(function (response) {
+        location.replace("/web/game.html?gp=" + response.gpId);
+        console.log(response);
+        console.log("join done");
+    }).fail(function () {
+        console.log("fail join");
+    })
+}

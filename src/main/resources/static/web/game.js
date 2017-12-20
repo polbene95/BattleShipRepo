@@ -99,3 +99,8 @@ function displaySalvos() {
         console.log(slavoLocation);
     }
 }
+
+function backButton () {
+    var backButton = document.getElementById("back-button");
+    backButton.setAttribute("href","/web/games.html");
+}
