@@ -10,8 +10,15 @@
 <body>
     <div class="container">
         <header>
-            <div>
-                <button id="back-button" class="btn" onclick="backButton()">Back</button>
+            <div class="header_header">
+                <a id="back-button" class="btn" onclick="backButton()">Back</a>
+
+                <div id="my-ships">
+<!--
+                    <button class="btn" onclick="randomShip()"> Place Random Ships</button>
+                    <button class="btn" id="post-ship" onclick="placeShips()"> Ready </button>
+-->
+                </div>
             </div>
             <div class="title">
                 <h1>Ship Location</h1>
@@ -22,7 +29,20 @@
             <table id="table-grid-your"></table>
             <table id="table-grid-enemy"></table>
         </div>
-        <div id="my-ships"></div>
+        <div id="place-ship">
+           <div>
+            <input id="dest-radio" type="radio" name="ship" value="destructor" onclick="placeDest()" >Destructor
+           </div>
+           <div>
+            <input id="crui-radio" type="radio" name="ship" value="cruiser" onclick="placeCrui()" >Cruiser
+           </div>
+           <div>
+            <input id="sub-radio" type="radio" name="ship" value="submarine" onclick="placeSub()">Submarine
+           </div>
+           <div>
+            <input id="boat-radio" type="radio" name="ship" value="boat" onclick="placeBoat()">Boat
+           </div>
+        </div>
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

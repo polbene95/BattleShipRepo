@@ -59,9 +59,9 @@ public class SalvoController {
         if (userName.isEmpty()) {
             return new ResponseEntity<>(makeMap("error","No Name"), HttpStatus.FORBIDDEN);
         }
-        if (password.isEmpty()) {
-            return new ResponseEntity<>(makeMap("error","No Password"), HttpStatus.FORBIDDEN);
-        }
+//        if (password.isEmpty()) {
+//            return new ResponseEntity<>(makeMap("error","No Password"), HttpStatus.FORBIDDEN);
+//        }
         List<Player> players = playerRepo.findByUserName(userName);
         if (!players.isEmpty()) {
             return new ResponseEntity<>(makeMap("error","Existing User"), HttpStatus.CONFLICT);
@@ -192,6 +192,14 @@ public class SalvoController {
         }else {
             return null;
         }
+    }
+    @RequestMapping(path = "/games/players/{gamePlayerId}/ships" , method = RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> createShips (@PathVariable Long gamePlayerId, @RequestBody Ship ship) {
+        GamePlayer gamePlayer = gamePlayerRepo.getOne(gamePlayerId);
+        ship.setGamePlayer(gamePlayer);
+        shipRepo.save(ship);
+
+        return new ResponseEntity<>(makeMap("ship", ship.getId()), HttpStatus.CREATED);
     }
 }
 

@@ -1,5 +1,5 @@
 /*Data table extra info hided*/
-#rank-table_info.datatables_info, #list-table_info.datatables_info, #list-table_filter.datatables_length, #list-table_paginate, #list-table_length, #rank-table_filter.datatables_length, #rank-table_paginate, #rank-table_length, #rank-table_filter.datatables_length   {
+#rank-table_info.datatables_info, #list-table_info.datatables_info, #list-table_filter.datatables_length, #list-table_paginate, #list-table_length, #rank-table_filter.datatables_length, #rank-table_paginate, #rank-table_length, #rank-table_filter.datatables_length, #rank-table_filter   {
     display: none;
 }
 

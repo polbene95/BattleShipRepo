@@ -58,3 +58,10 @@ td:hover {
     background: blue;
     color: transparent;
 }
+.header_header {
+    display: flex;
+    justify-content: space-between;
+}
+#place-ship {
+    display: flex;
+}

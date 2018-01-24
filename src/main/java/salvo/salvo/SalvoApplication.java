@@ -46,7 +46,7 @@ public class SalvoApplication {
 			Game g1 = gameRepository.save(new Game());
 			Game g2 = gameRepository.save(new Game());
 			Game g3 = gameRepository.save(new Game());
-//			Game g4 = gameRepository.save(new Game());
+			Game g4 = gameRepository.save(new Game());
 
 			GamePlayer gp1 = gamePlayerRepository.save(new GamePlayer(p1, g1));
 			GamePlayer gp2 = gamePlayerRepository.save(new GamePlayer(p2, g1));
@@ -54,7 +54,7 @@ public class SalvoApplication {
 			GamePlayer gp4 = gamePlayerRepository.save(new GamePlayer(p2, g2));
 			GamePlayer gp5 = gamePlayerRepository.save(new GamePlayer(p1, g3));
 			GamePlayer gp6 = gamePlayerRepository.save(new GamePlayer(p3, g3));
-//			GamePlayer gp7 = gamePlayerRepository.save(new GamePlayer(p4, g4));
+			GamePlayer gp7 = gamePlayerRepository.save(new GamePlayer(p4, g4));
 
 			List<String> loc1 = Arrays.asList("H2", "H3");
 			List<String> loc2 = Arrays.asList("B3", "C3", "D3");
@@ -120,7 +120,6 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 		};
 	}
 }
-
 @EnableWebSecurity
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
