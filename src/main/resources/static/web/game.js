@@ -1,5 +1,6 @@
 //$("#my-ships").hide();
 placeShips();
+//randomArry();
 $(document).ready(function () {
     var gpID = getURL();
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
@@ -108,54 +109,73 @@ function backButton() {
 }
 
 function placeShips() {
-    
+
+
     var destRadio = document.getElementById("dest-radio");
     var cruiRadio = document.getElementById("crui-radio");
     var subRadio = document.getElementById("sub-radio");
     var boatRadio = document.getElementById("boat-radio");
-    
+
     if (destRadio.checked) {
-        
+
         console.log("dest is checked");
     }
-//    if () {}
-//    if () {}
-//    if () {}
-//    
-    
-    
-  }
-function placeDest () {
-    
-    var destRadio = document.getElementById("dest-radio");
-    console.log("dest is checked");
+    //    if () {}
+    //    if () {}
+    //    if () {}
+    //    
 }
 
-function placeCrui () {
+function placeDest() {
+    var randomArray = randomArry();
+    console.log("dest is checked");
     
+    for (var i = 0; i < randomArray.length; i++) {
+        var randomNumber = randomArray[i];
+        $("#U" + randomNumber).click(function () {
+            console.log("Button clicked, id " + this.id);
+            $("#U" + randomNumber).addClass("ship-location");
+            
+        });   
+    }
+}
+
+function placeCrui() {
+
     var cruiRadio = document.getElementById("crui-radio");
     console.log("crui is checked");
-    
+
 }
 
-function placeSub () {
-    
+function placeSub() {
+
     var subRadio = document.getElementById("sub-radio");
     console.log("submarine is checked");
-    
+
 }
 
-function placeBoat () {
-    
+function placeBoat() {
+
     var boatRadio = document.getElementById("boat-radio");
     console.log("boat is checked");
 }
 
+function randomArry() {
 
+    var randomArray = [];
 
+    var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
+    for (i = 0; i < alphabet.length; i++) {
+        for (j = 0; j < numbers.length; j++) {
+            var position = alphabet[i] + numbers[j];
+            randomArray.push(position);
+        }
+    }
 
-
+    return randomArray;
+}
 
 
 
@@ -198,22 +218,6 @@ function placeBoat () {
 
 
 //
-//function randomArry() {
-//
-//    var randomArray = [];
-//
-//    var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
-//    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-//
-//    for (i = 0; i < alphabet.length; i++) {
-//        for (j = 0; j < numbers.length; j++) {
-//            var position = alphabet[i] + numbers[j];
-//            randomArray.push(position);
-//        }
-//    }
-//
-//    return randomArray;
-//}
 //
 //function randomShip() {
 //
