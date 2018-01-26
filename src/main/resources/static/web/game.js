@@ -1,6 +1,4 @@
 //$("#my-ships").hide();
-placeShips();
-//randomArry();
 $(document).ready(function () {
     var gpID = getURL();
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
@@ -24,25 +22,32 @@ function getURL() {
 }
 
 // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
+var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 function crateGrid() {
     var yourGrid = document.getElementById("table-grid-your");
     var enemyGrid = document.getElementById("table-grid-enemy");
-    var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
-    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
     var ships = data.ships;
     for (i = 0; i < alphabet.length; i++) {
         var rowU = document.createElement("tr");
         var rowE = document.createElement("tr");
         for (j = 0; j < numbers.length; j++) {
+            var parU = document.createElement("p");
+            var parE = document.createElement("p");
+            parU.setAttribute("class", "pInBack");
+            parE.setAttribute("class", "pInBack");
             var colU = document.createElement("td");
             var colE = document.createElement("td");
+
             rowU.appendChild(colU);
             rowE.appendChild(colE);
+            colU.append(parU);
+            colE.append(parE);
             colU.id = "U" + alphabet[i] + numbers[j];
             colE.id = "E" + alphabet[i] + numbers[j];
-            colU.innerHTML = alphabet[i] + numbers[j];
-            colE.innerHTML = alphabet[i] + numbers[j];
+            parU.innerHTML = alphabet[i] + numbers[j];
+            parE.innerHTML = alphabet[i] + numbers[j];
             for (k = 0; k < ships.length; k++) {
                 for (l = 0; l < ships[k].location.length; l++) {
                     if (ships[k].location[l] == alphabet[i] + numbers[j]) {
@@ -108,73 +113,138 @@ function backButton() {
     backButton.setAttribute("href", "/web/games.html");
 }
 
-function placeShips() {
+function placeShip(ship) {
 
+    if (ship == "#drag1") {
 
-    var destRadio = document.getElementById("dest-radio");
-    var cruiRadio = document.getElementById("crui-radio");
-    var subRadio = document.getElementById("sub-radio");
-    var boatRadio = document.getElementById("boat-radio");
-
-    if (destRadio.checked) {
-
-        console.log("dest is checked");
+        $("#drag1").width(245);
     }
-    //    if () {}
-    //    if () {}
-    //    if () {}
-    //    
-}
+    if (ship == "#drag2") {
 
-function placeDest() {
-    var randomArray = randomArry();
-    console.log("dest is checked");
-    
-    for (var i = 0; i < randomArray.length; i++) {
-        var randomNumber = randomArray[i];
-        $("#U" + randomNumber).click(function () {
-            console.log("Button clicked, id " + this.id);
-            $("#U" + randomNumber).addClass("ship-location");
-            
-        });   
+        $("#drag2").width(195);
     }
-}
+    if (ship == "#drag3") {
 
-function placeCrui() {
+        $("#drag3").width(145);
+    }
+    if (ship == "#drag4") {
+        $("#drag4").width(195);
 
-    var cruiRadio = document.getElementById("crui-radio");
-    console.log("crui is checked");
+    }
+    $(ship).height(45);
 
-}
+    var getParentsIdCrui = $(ship).parent().attr("id");
 
-function placeSub() {
+    var rowLocShip = getParentsIdCrui.charAt(1);
+    //    console.log(alphabet[alphabet.indexOf(rowLocShip) - i]);
+    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
+    var verPos = alphabet[alphabet.indexOf(rowLocShip)]
+    var ShipLocations = [];
+    var ShipLocations2 = [];
 
-    var subRadio = document.getElementById("sub-radio");
-    console.log("submarine is checked");
+    if ($(ship).width() == 245) {
+        for (var i = 0; i < 5; i++) {
+            var ShipLocat = (ShipLoc + i).toString();
+            ShipLocations.push(rowLocShip + ShipLocat);
+            ShipLocations2.push("U" + rowLocShip + ShipLocat);
 
-}
-
-function placeBoat() {
-
-    var boatRadio = document.getElementById("boat-radio");
-    console.log("boat is checked");
-}
-
-function randomArry() {
-
-    var randomArray = [];
-
-    var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
-    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-    for (i = 0; i < alphabet.length; i++) {
-        for (j = 0; j < numbers.length; j++) {
-            var position = alphabet[i] + numbers[j];
-            randomArray.push(position);
+        }
+    } else if ($(ship).width() == 195) {
+        for (var i = 0; i < 4; i++) {
+            var ShipLocat = (ShipLoc + i).toString();
+            ShipLocations.push(rowLocShip + ShipLocat);
+            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+        }
+    } else if ($(ship).width() == 145) {
+        for (var i = 0; i < 3; i++) {
+            var ShipLocat = (ShipLoc + i).toString();
+            ShipLocations.push(rowLocShip + ShipLocat);
+            ShipLocations2.push("U" + rowLocShip + ShipLocat);
         }
     }
 
-    return randomArray;
+
+    console.log(ShipLocations);
+    console.log(ShipLocations2);
+
+
+}
+
+function placeShip2(ship) {
+
+    if (ship == "#drag1") {
+        $("#drag1").height(245);
+
+    }
+    if (ship == "#drag2") {
+
+        $("#drag2").height(195);
+    }
+    if (ship == "#drag3") {
+
+        $("#drag3").height(145);
+    }
+    if (ship == "#drag4") {
+        $("#drag4").height(145);
+
+    }
+    $(ship).width(45);
+
+    var getParentsIdCrui = $(ship).parent().attr("id");
+
+    var rowLocShip = getParentsIdCrui.charAt(1);
+    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
+
+    var ShipLocations = [];
+    var ShipLocations2 = [];
+
+    if ($(ship).height() == 245) {
+        for (var i = 0; i < 5; i++) {
+
+            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+            var ShipLocat = verPos.toString();
+
+            ShipLocations.push(verPos + ShipLoc);
+            ShipLocations2.push("U" + verPos + ShipLoc);
+        }
+    } else if ($(ship).height() == 195) {
+        for (var i = 0; i < 4; i++) {
+
+            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+            var ShipLocat = (verPos).toString();
+
+            ShipLocations.push(verPos + ShipLoc);
+            ShipLocations2.push("U" + verPos + ShipLoc);
+        }
+    } else if ($(ship).height() == 145) {
+        for (var i = 0; i < 3; i++) {
+
+            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+            var ShipLocat = (verPos).toString();
+
+            ShipLocations.push(verPos + ShipLoc);
+            ShipLocations2.push("U" + verPos + ShipLoc);
+        }
+    }
+
+
+    console.log(ShipLocations);
+    console.log(ShipLocations2);
+
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
 }
 
 
@@ -185,29 +255,46 @@ function randomArry() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//function randomArry() {
+//
+//    var randomArray = [];
+//
+//    var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+//    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+//
+//    for (i = 0; i < alphabet.length; i++) {
+//        for (j = 0; j < numbers.length; j++) {
+//            var position = alphabet[i] + numbers[j];
+//            randomArray.push(position);
+//        }
+//    }
+//
+//    return randomArray;
+//}
+//
+//function placeDest() {
+//    
+//}
+//
+//function placeCrui() {
+//
+//    var cruiRadio = document.getElementById("crui-radio");
+//    console.log("crui is checked");
+//
+//}
+//
+//function placeSub() {
+//
+//    var subRadio = document.getElementById("sub-radio");
+//    console.log("submarine is checked");
+//
+//}
+//
+//function placeBoat() {
+//
+//    var boatRadio = document.getElementById("boat-radio");
+//    console.log("boat is checked");
+//}
 
 
 

@@ -14,7 +14,7 @@
                 <a id="back-button" class="btn" onclick="backButton()">Back</a>
 
                 <div id="my-ships">
-<!--
+                    <!--
                     <button class="btn" onclick="randomShip()"> Place Random Ships</button>
                     <button class="btn" id="post-ship" onclick="placeShips()"> Ready </button>
 -->
@@ -26,10 +26,23 @@
             <div id="players"></div>
         </header>
         <div class="table-div">
-            <table id="table-grid-your"></table>
+            <table id="table-grid-your" ondrop="drop(event)" ondragover="allowDrop(event)"></table>
             <table id="table-grid-enemy"></table>
         </div>
         <div id="place-ship">
+            <div id="drag1" draggable="true" ondragstart="drag(event)">
+                DESTRUCTOR
+            </div>
+            <div id="drag2" draggable="true" ondragstart="drag(event)">
+                CRUISER
+            </div>
+            <div id="drag3" draggable="true" ondragstart="drag(event)">
+                SUBMARINE
+            </div>
+            <div id="drag4" draggable="true" ondragstart="drag(event)">
+                PATROL BOAT
+            </div>
+            <!--
            <div>
             <input id="dest-radio" type="radio" name="ship" value="destructor" onclick="placeDest()" >Destructor
            </div>
@@ -42,6 +55,7 @@
            <div>
             <input id="boat-radio" type="radio" name="ship" value="boat" onclick="placeBoat()">Boat
            </div>
+-->
         </div>
     </div>
 </body>
