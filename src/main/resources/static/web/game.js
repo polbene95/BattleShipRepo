@@ -1,16 +1,40 @@
-//$("#my-ships").hide();
+var gpID = getURL();
 $(document).ready(function () {
-    var gpID = getURL();
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
         data = json;
         console.log(data);
         crateGrid();
         displayPlayers();
         displaySalvos();
+
+        if (data.ships[0] != null) {
+
+            $("#table-grid-enemy").show();
+            $("#players").show();
+            $("#place-ship").hide();
+            $("#drag1").hide();
+            $("#drag2").hide();
+            $("#drag3").hide();
+            $("#drag4").hide();
+
+        } else {
+
+            $("#table-grid-enemy").hide();
+            $("#players").hide();
+            $(".btnHori").hide();
+
+        }
         //        placeShips();
         //        randomShip();
     });
 });
+
+var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+randomArray();
+
+console.log(randomArray);
+
 // Genrea un var que cambia el JSON que llega desde location.search, solo necesito el numero así que hago lo siguiente:
 // location.search nos da &gp=1
 // - .split("&")[0]: elimina el & y toma el valor sigueinte, es decir, gp=1;
@@ -22,10 +46,18 @@ function getURL() {
 }
 
 // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
-var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+function reloadApiGames() {
+    $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
+        data = json;
+        crateGrid();
+    })
+}
 
 function crateGrid() {
+
+
+
     var yourGrid = document.getElementById("table-grid-your");
     var enemyGrid = document.getElementById("table-grid-enemy");
     var ships = data.ships;
@@ -113,10 +145,229 @@ function backButton() {
     backButton.setAttribute("href", "/web/games.html");
 }
 
+function randomArray() {
+
+    var randomArray = [];
+    for (i = 0; i < alphabet.length; i++) {
+        for (j = 0; j < numbers.length; j++) {
+            var position = alphabet[i] + numbers[j];
+            randomArray.push(position);
+        }
+    }
+    return randomArray;
+    console.log(randomArray);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+function getAllPositions() {
+
+    var randomArray = [];
+    for (i = 0; i < alphabet.length; i++) {
+        for (j = 0; j < numbers.length; j++) {
+            var position = alphabet[i] + numbers[j];
+            randomArray.push(position);
+        }
+    }
+    //    console.log(randomArray);
+    var gpID = getURL();
+
+    //    console.log(placeShip("#drag1"));
+    //    console.log(placeShip("#drag2"));
+    //    console.log(placeShip("#drag3"));
+    //    console.log(placeShip("#drag4"));
+
+    var desLoc = placeShip("#drag1");
+    var cruiLoc = placeShip("#drag2");
+    var subLoc = placeShip("#drag3");
+    var patLoc = placeShip("#drag4");
+
+    var ships = [
+        {
+            type: "Destructor",
+            locations: desLoc
+            }, {
+            type: "Cruiser",
+            locations: cruiLoc
+                       },
+        {
+            type: "Submarine",
+            locations: subLoc
+                       },
+        {
+            type: "Patrol Boat",
+            locations: patLoc
+                       }];
+
+    var allLoc = [];
+
+    for (let i = 0; i < desLoc.length; i++) {
+        var eachLoc = desLoc[i];
+        allLoc.push(eachLoc);
+    }
+    for (let i = 0; i < cruiLoc.length; i++) {
+        var eachLoc = cruiLoc[i];
+        allLoc.push(eachLoc);
+    }
+    for (let i = 0; i < subLoc.length; i++) {
+        var eachLoc = subLoc[i];
+        allLoc.push(eachLoc);
+    }
+    for (let i = 0; i < patLoc.length; i++) {
+        var eachLoc = patLoc[i];
+        allLoc.push(eachLoc);
+    }
+
+    //    console.log(allLoc);
+
+    //////////////////////RESTRICTIONS//////////////////////////
+    var valuesSoFar = [];
+    for (let i = 0; i < allLoc.length; ++i) {
+        //////////////////////OVERPLACED////////////////////////////
+        var value = allLoc[i];
+        //        console.log(value);
+        if (valuesSoFar.indexOf(value) !== -1) {
+            if (value === "lNaN") {
+
+                console.log("Ship not placed");
+                var alert1 = "MUST PLACE ALL YOUR SHIPS";
+
+            } else {
+
+                console.log("ERROR OVERPLACED AT " + value);
+                var alert2 = "ERROR OVERPLACED AT " + value + ", PLASE PLACE IT ON DIFERENT POSITIONS";
+            }
+        }
+        ////////////////////////OUTSIDE TEH GRID////////////////////
+        if (randomArray.includes(value) == false) {
+            console.log("Not In Grid");
+            var alert3 = "PLACING SHIPS OUTSIDE THE GRID"
+        }
+
+        valuesSoFar.push(value);
+    }
+    if (alert1 != undefined) {
+        alert(alert1);
+        window.location.reload();
+    } else if (alert2 != undefined) {
+        alert(alert2);
+        window.location.reload();
+    } else if (alert3 != undefined) {
+        alert(alert3);
+        window.location.reload();
+    } else {
+        ////////////////////////POST////////////////////////
+        $.post({
+                url: "/api/games/players/" + gpID + "/ships",
+                data: JSON.stringify(ships),
+                dataType: "text",
+                contentType: "application/json"
+            })
+            .done(function (response) {
+                console.log(ships);
+                console.log(response)
+//                reloadApiGames();
+                alert("Ships added: " + ships);
+                $("#table-grid-enemy").show();
+                $("#players").show();
+                $("#place-ship").hide();
+                $("#drag1").hide();
+                $("#drag2").hide();
+                $("#drag3").hide();
+                $("#drag4").hide();
+            window.location.reload();
+
+            })
+            .fail(function () {
+                console.log("error something is failing");
+            })
+
+    }
+}
+
 function placeShip(ship) {
 
-    if (ship == "#drag1") {
+    var getParentsIdCrui = $(ship).parent().attr("id");
 
+    var rowLocShip = getParentsIdCrui.charAt(1);
+    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
+    var verPos = alphabet[alphabet.indexOf(rowLocShip)];
+
+    var ShipLocations = [];
+    var ShipLocations2 = [];
+    /////////////////DESTRUCTOR HOR/////////////
+    if ($(ship).width() == 245) {
+        for (var i = 0; i < 5; i++) {
+            var ShipLocat = (ShipLoc + i).toString();
+
+            ShipLocations.push(rowLocShip + ShipLocat);
+            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+            //            $("#U" + rowLocShip + ShipLocat).addClass("ship-location");
+
+        }
+        ////////////////CRUISER HOR/////////////////
+    } else if ($(ship).width() == 195) {
+        for (var i = 0; i < 4; i++) {
+            var ShipLocat = (ShipLoc + i).toString();
+
+            ShipLocations.push(rowLocShip + ShipLocat);
+            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+            //            $("#U" + rowLocShip + ShipLocat).addClass("ship-location");
+        }
+        //////////////SUBMARINE AND PETROL BOAT HOR///////////////
+    } else if ($(ship).width() == 145) {
+        for (var i = 0; i < 3; i++) {
+            var ShipLocat = (ShipLoc + i).toString();
+
+            ShipLocations.push(rowLocShip + ShipLocat);
+            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+            //            $("#U" + rowLocShip + ShipLocat).addClass("ship-location");
+        }
+        ////////////////////////DESTRUCTOR VER///////////////////
+    } else if ($(ship).height() == 245) {
+        for (var i = 0; i < 5; i++) {
+
+            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+            var ShipLocat = verPos.toString();
+
+            ShipLocations.push(verPos + ShipLoc);
+            ShipLocations2.push("U" + verPos + ShipLoc);
+            //            $("#U" + verPos + ShipLoc).addClass("ship-location");
+        }
+        ////////////////////////CRUISER VER//////////////////////
+    } else if ($(ship).height() == 195) {
+        for (var i = 0; i < 4; i++) {
+
+            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+            var ShipLocat = (verPos).toString();
+
+            ShipLocations.push(verPos + ShipLoc);
+            ShipLocations2.push("U" + verPos + ShipLoc);
+            //            $("#U" + verPos + ShipLoc).addClass("ship-location");
+        }
+        //////////////////SUBMARINE AND PETROL BOAT VER///////////////
+    } else if ($(ship).height() == 145) {
+        for (var i = 0; i < 3; i++) {
+
+            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+            var ShipLocat = (verPos).toString();
+
+            ShipLocations.push(verPos + ShipLoc);
+            ShipLocations2.push("U" + verPos + ShipLoc);
+            //            $("#U" + verPos + ShipLoc).addClass("ship-location");
+        }
+    }
+
+    //    console.log(ShipLocations2);
+    //    console.log(ShipLocations);
+    return ShipLocations;
+}
+
+//ROTATE FUNCTIONS
+
+function rotateToHoriz(ship) {
+
+    if (ship == "#drag1") {
         $("#drag1").width(245);
     }
     if (ship == "#drag2") {
@@ -128,53 +379,19 @@ function placeShip(ship) {
         $("#drag3").width(145);
     }
     if (ship == "#drag4") {
-        $("#drag4").width(195);
+        $("#drag4").width(145);
 
     }
     $(ship).height(45);
 
-    var getParentsIdCrui = $(ship).parent().attr("id");
-
-    var rowLocShip = getParentsIdCrui.charAt(1);
-    //    console.log(alphabet[alphabet.indexOf(rowLocShip) - i]);
-    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
-    var verPos = alphabet[alphabet.indexOf(rowLocShip)]
-    var ShipLocations = [];
-    var ShipLocations2 = [];
-
-    if ($(ship).width() == 245) {
-        for (var i = 0; i < 5; i++) {
-            var ShipLocat = (ShipLoc + i).toString();
-            ShipLocations.push(rowLocShip + ShipLocat);
-            ShipLocations2.push("U" + rowLocShip + ShipLocat);
-
-        }
-    } else if ($(ship).width() == 195) {
-        for (var i = 0; i < 4; i++) {
-            var ShipLocat = (ShipLoc + i).toString();
-            ShipLocations.push(rowLocShip + ShipLocat);
-            ShipLocations2.push("U" + rowLocShip + ShipLocat);
-        }
-    } else if ($(ship).width() == 145) {
-        for (var i = 0; i < 3; i++) {
-            var ShipLocat = (ShipLoc + i).toString();
-            ShipLocations.push(rowLocShip + ShipLocat);
-            ShipLocations2.push("U" + rowLocShip + ShipLocat);
-        }
-    }
-
-
-    console.log(ShipLocations);
-    console.log(ShipLocations2);
-
-
+    $(".btnVert").show();
+    $(".btnHori").hide();
 }
 
-function placeShip2(ship) {
+function rotateToVert(ship) {
 
     if (ship == "#drag1") {
         $("#drag1").height(245);
-
     }
     if (ship == "#drag2") {
 
@@ -186,52 +403,14 @@ function placeShip2(ship) {
     }
     if (ship == "#drag4") {
         $("#drag4").height(145);
-
     }
     $(ship).width(45);
 
-    var getParentsIdCrui = $(ship).parent().attr("id");
-
-    var rowLocShip = getParentsIdCrui.charAt(1);
-    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
-
-    var ShipLocations = [];
-    var ShipLocations2 = [];
-
-    if ($(ship).height() == 245) {
-        for (var i = 0; i < 5; i++) {
-
-            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
-            var ShipLocat = verPos.toString();
-
-            ShipLocations.push(verPos + ShipLoc);
-            ShipLocations2.push("U" + verPos + ShipLoc);
-        }
-    } else if ($(ship).height() == 195) {
-        for (var i = 0; i < 4; i++) {
-
-            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
-            var ShipLocat = (verPos).toString();
-
-            ShipLocations.push(verPos + ShipLoc);
-            ShipLocations2.push("U" + verPos + ShipLoc);
-        }
-    } else if ($(ship).height() == 145) {
-        for (var i = 0; i < 3; i++) {
-
-            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
-            var ShipLocat = (verPos).toString();
-
-            ShipLocations.push(verPos + ShipLoc);
-            ShipLocations2.push("U" + verPos + ShipLoc);
-        }
-    }
-
-
-    console.log(ShipLocations);
-    console.log(ShipLocations2);
-
+    $(".btnVert").hide();
+    $(".btnHori").show();
 }
+
+//DRAG AND DROP FUNCTIONS
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -255,22 +434,6 @@ function drop(ev) {
 
 
 
-//function randomArry() {
-//
-//    var randomArray = [];
-//
-//    var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
-//    var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-//
-//    for (i = 0; i < alphabet.length; i++) {
-//        for (j = 0; j < numbers.length; j++) {
-//            var position = alphabet[i] + numbers[j];
-//            randomArray.push(position);
-//        }
-//    }
-//
-//    return randomArray;
-//}
 //
 //function placeDest() {
 //    
@@ -432,4 +595,166 @@ function drop(ev) {
 //
 //function placeShipManually () {
 //    
+//}
+
+////////////////////////////////////////////////////////////////////////
+
+//
+//function placeShip(ship) {
+//
+//    var getParentsIdCrui = $(ship).parent().attr("id");
+//
+//    var rowLocShip = getParentsIdCrui.charAt(1);
+//    //    console.log(alphabet[alphabet.indexOf(rowLocShip) - i]);
+//    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
+//    var verPos = alphabet[alphabet.indexOf(rowLocShip)]
+//    var ShipLocations = [];
+//    var ShipLocations2 = [];
+//
+//    if ($(ship).width() == 245 || $(ship).height() == 245) {
+//        for (var i = 0; i < 5; i++) {
+//            var ShipLocat = (ShipLoc + i).toString();
+//            ShipLocations.push(rowLocShip + ShipLocat);
+//            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+//
+//        }
+//    } else if ($(ship).width() == 195 || $(ship).height() == 195) {
+//        for (var i = 0; i < 4; i++) {
+//            var ShipLocat = (ShipLoc + i).toString();
+//            ShipLocations.push(rowLocShip + ShipLocat);
+//            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+//        }
+//    } else if ($(ship).width() == 145 || $(ship).height() == 145) {
+//        for (var i = 0; i < 3; i++) {
+//            var ShipLocat = (ShipLoc + i).toString();
+//            ShipLocations.push(rowLocShip + ShipLocat);
+//            ShipLocations2.push("U" + rowLocShip + ShipLocat);
+//        }
+//    }
+//
+//
+//    console.log(ShipLocations);
+//    console.log(ShipLocations2);
+//
+//
+//}
+//
+//function rotateToHoriz(ship) {
+//
+//    if (ship == "#drag1") {
+//        $("#drag1").height(245);
+//
+//    }
+//    if (ship == "#drag2") {
+//
+//        $("#drag2").height(195);
+//    }
+//    if (ship == "#drag3") {
+//
+//        $("#drag3").height(145);
+//    }
+//    if (ship == "#drag4") {
+//        $("#drag4").height(145);
+//
+//    }
+//    $(ship).width(45);
+//
+//}
+//
+//function rotateToVert(ship) {
+//
+//    if (ship == "#drag1") {
+//        $("#drag1").height(245);
+//
+//    }
+//    if (ship == "#drag2") {
+//
+//        $("#drag2").height(195);
+//    }
+//    if (ship == "#drag3") {
+//
+//        $("#drag3").height(145);
+//    }
+//    if (ship == "#drag4") {
+//        $("#drag4").height(145);
+//
+//    }
+//    $(ship).width(45);
+//}
+//
+//function placeShip2(ship) {
+//
+//    //    if (ship == "#drag1") {
+//    //        $("#drag1").height(245);
+//    //
+//    //    }
+//    //    if (ship == "#drag2") {
+//    //
+//    //        $("#drag2").height(195);
+//    //    }
+//    //    if (ship == "#drag3") {
+//    //
+//    //        $("#drag3").height(145);
+//    //    }
+//    //    if (ship == "#drag4") {
+//    //        $("#drag4").height(145);
+//    //
+//    //    }
+//    //    $(ship).width(45);
+//
+//    var getParentsIdCrui = $(ship).parent().attr("id");
+//
+//    var rowLocShip = getParentsIdCrui.charAt(1);
+//    var ShipLoc = parseInt(getParentsIdCrui.charAt(2));
+//
+//    var ShipLocations = [];
+//    var ShipLocations2 = [];
+//
+//    if ($(ship).height() == 245) {
+//        for (var i = 0; i < 5; i++) {
+//
+//            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+//            var ShipLocat = verPos.toString();
+//
+//            ShipLocations.push(verPos + ShipLoc);
+//            ShipLocations2.push("U" + verPos + ShipLoc);
+//        }
+//    } else if ($(ship).height() == 195) {
+//        for (var i = 0; i < 4; i++) {
+//
+//            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+//            var ShipLocat = (verPos).toString();
+//
+//            ShipLocations.push(verPos + ShipLoc);
+//            ShipLocations2.push("U" + verPos + ShipLoc);
+//        }
+//    } else if ($(ship).height() == 145) {
+//        for (var i = 0; i < 3; i++) {
+//
+//            var verPos = alphabet[alphabet.indexOf(rowLocShip) + i];
+//            var ShipLocat = (verPos).toString();
+//
+//            ShipLocations.push(verPos + ShipLoc);
+//            ShipLocations2.push("U" + verPos + ShipLoc);
+//        }
+//    }
+//
+//
+//    console.log(ShipLocations);
+//    console.log(ShipLocations2);
+//
+//}
+//
+//function allowDrop(ev) {
+//    ev.preventDefault();
+//}
+//
+//function drag(ev) {
+//    ev.dataTransfer.setData("text", ev.target.id);
+//}
+//
+//function drop(ev) {
+//    ev.preventDefault();
+//    var data = ev.dataTransfer.getData("text");
+//    ev.target.appendChild(document.getElementById(data));
 //}

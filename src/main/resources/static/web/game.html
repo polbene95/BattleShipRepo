@@ -14,10 +14,10 @@
                 <a id="back-button" class="btn" onclick="backButton()">Back</a>
 
                 <div id="my-ships">
-                    <!--
-                    <button class="btn" onclick="randomShip()"> Place Random Ships</button>
-                    <button class="btn" id="post-ship" onclick="placeShips()"> Ready </button>
--->
+
+                    <!--                    <button class="btn" onclick="randomShip()"> Place Random Ships</button>-->
+                    <button class="btn" id="post-ship" onclick="getAllPositions()"> Ready </button>
+    
                 </div>
             </div>
             <div class="title">
@@ -26,36 +26,38 @@
             <div id="players"></div>
         </header>
         <div class="table-div">
-            <table id="table-grid-your" ondrop="drop(event)" ondragover="allowDrop(event)"></table>
+            <table id="table-grid-your" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
             <table id="table-grid-enemy"></table>
-        </div>
-        <div id="place-ship">
-            <div id="drag1" draggable="true" ondragstart="drag(event)">
-                DESTRUCTOR
+            <div id="place-ship">
+                <div id="drag1" draggable="true" ondragstart="drag(event)">
+                    <button class="btn btnVert" onclick="rotateToVert('#drag1')"></button>
+                    <button class="btn btnHori" onclick="rotateToHoriz('#drag1')"></button>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div id="drag2" draggable="true" ondragstart="drag(event)">
+                    <button class="btn btnVert" onclick="rotateToVert('#drag2')"></button>
+                    <button class="btn btnHori" onclick="rotateToHoriz('#drag2')"></button>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div id="drag3" draggable="true" ondragstart="drag(event)">
+                    <button class="btn btnVert" onclick="rotateToVert('#drag3')"></button>
+                    <button class="btn btnHori" onclick="rotateToHoriz('#drag3')"></button>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div id="drag4" draggable="true" ondragstart="drag(event)">
+                    <button class="btn btnVert" onclick="rotateToVert('#drag4')"></button>
+                    <button class="btn btnHori" onclick="rotateToHoriz('#drag4')"></button>
+                </div>
             </div>
-            <div id="drag2" draggable="true" ondragstart="drag(event)">
-                CRUISER
-            </div>
-            <div id="drag3" draggable="true" ondragstart="drag(event)">
-                SUBMARINE
-            </div>
-            <div id="drag4" draggable="true" ondragstart="drag(event)">
-                PATROL BOAT
-            </div>
-            <!--
-           <div>
-            <input id="dest-radio" type="radio" name="ship" value="destructor" onclick="placeDest()" >Destructor
-           </div>
-           <div>
-            <input id="crui-radio" type="radio" name="ship" value="cruiser" onclick="placeCrui()" >Cruiser
-           </div>
-           <div>
-            <input id="sub-radio" type="radio" name="ship" value="submarine" onclick="placeSub()">Submarine
-           </div>
-           <div>
-            <input id="boat-radio" type="radio" name="ship" value="boat" onclick="placeBoat()">Boat
-           </div>
--->
         </div>
     </div>
 </body>

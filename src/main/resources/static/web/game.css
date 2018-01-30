@@ -77,7 +77,8 @@ td:hover {
 #place-ship {
     display: flex;
     flex-direction: column;
-    height: 200px;
+    height: 250px;
+    width: 30%;
 }
 
 #drag1,
@@ -95,18 +96,18 @@ td:hover {
 
 #drag1 {
     width: 245px;
-/*    height: 245px;*/
+    /*    height: 245px;*/
 }
 
 #drag2 {
     width: 195px;
-/*    height: 195px;*/
+    /*    height: 195px;*/
 }
 
 #drag3,
 #drag4 {
     width: 145px;
-/*    height: 145px;*/
+    /*    height: 145px;*/
 }
 
 .pInBack {

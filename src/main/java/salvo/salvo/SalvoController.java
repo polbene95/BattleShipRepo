@@ -77,7 +77,7 @@ public class SalvoController {
     }
     @RequestMapping("/games")
     public Map<String,Object> getGames(Authentication authentication) {
-        //Queremos hacer un loop, pero el for no vale, uaremos un stream que e  si mismo tambien es un loop.
+        //Queremos hacer un loop, pero el for no vale, uaremos un stream que tambien es un loop.
         //Para ello lo primero que haremos es busacr toda la infomacion de Games con .findAll().
         //Luego convertimos el gameRepo.findAll() en un stream, esté puede tener muchas funcionalidades como por ejemplo:
         //filtrate(),map(), sorted(). Usamos map que nos servira para que nos devuelva un objecto ÚNICO, es decir, que no este repetido,
@@ -121,8 +121,8 @@ public class SalvoController {
         //Y le decimos que debe cojer cierta información del getGamplePLay que le pusimos en la clase Game.
         //Como hemos hecho hasta el momento le creamos un id, un date y le añadimos un gamePlayer.
         //Este gamePlayer tambien sera un stream y haremos lo mismo en la funcion gamePlayInfo.
-        Set<GamePlayer> gplayers = game.getGamePlayers();
         Map<String , Object> gameMap = new LinkedHashMap<>();
+        Set<GamePlayer> gplayers = game.getGamePlayers();
         gameMap.put("id", game.getId());
         gameMap.put("created", game.getDate());
         gameMap.put("gameplayers", gplayers.stream()
@@ -169,7 +169,7 @@ public class SalvoController {
     private Map<String,Object> shipInfo (Ship ship) {
         Map<String,Object> shipMap = new LinkedHashMap<>();
         shipMap.put("type", ship.getType());
-        shipMap.put("location", ship.getLoactions());
+        shipMap.put("location", ship.getLocations());
         return shipMap;
     }
     private List<Object> salvoInfo (GamePlayer gamePlayer) {
@@ -194,12 +194,18 @@ public class SalvoController {
         }
     }
     @RequestMapping(path = "/games/players/{gamePlayerId}/ships" , method = RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> createShips (@PathVariable Long gamePlayerId, @RequestBody Ship ship) {
+    public ResponseEntity<Map<String,Object>> createShips (@PathVariable Long gamePlayerId,
+                                                           @RequestBody Set<Ship> ships
+                                                           ) {
         GamePlayer gamePlayer = gamePlayerRepo.getOne(gamePlayerId);
-        ship.setGamePlayer(gamePlayer);
-        shipRepo.save(ship);
 
-        return new ResponseEntity<>(makeMap("ship", ship.getId()), HttpStatus.CREATED);
+        for (Ship ship : ships) {
+            ship.setGamePlayer(gamePlayer);
+            shipRepo.save(ship);
+        }
+
+
+        return new ResponseEntity<>(makeMap("succed", "ship created"), HttpStatus.CREATED);
     }
 }
 

@@ -77,15 +77,15 @@ public class SalvoApplication {
 			Ship s2 = shipRepository.save(new Ship("destructor",loc2, gp1));
 			Ship s3 = shipRepository.save(new Ship("boat",loc3,gp1));
 			Ship s4 = shipRepository.save(new Ship("cruiser", loc4, gp2));
-//			Ship s5 = shipRepository.save(new Ship("destructor",loc5, gp2));
-//			Ship s6 = shipRepository.save(new Ship("boat",loc6,gp2));
+			Ship s5 = shipRepository.save(new Ship("destructor",loc5, gp2));
+			Ship s6 = shipRepository.save(new Ship("boat",loc6,gp2));
 
 			Score scoreGP1 = scoreRepository.save(new Score(1,p1, g1));
 			Score scoreGP2 = scoreRepository.save(new Score(0,p2, g1));
 			Score scoreGP3 = scoreRepository.save(new Score(1,p1, g2));
 			Score scoreGP4 = scoreRepository.save(new Score(0,p2, g2));
-			Score scoreGP5 = scoreRepository.save(new Score(0.5,p1, g3));
-			Score scoreGP6 = scoreRepository.save(new Score(0.5,p3, g3));
+//			Score scoreGP5 = scoreRepository.save(new Score(0.5,p1, g3));
+//			Score scoreGP6 = scoreRepository.save(new Score(0.5,p3, g3));
 
 		};
 	}

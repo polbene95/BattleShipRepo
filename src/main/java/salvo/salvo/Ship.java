@@ -25,18 +25,20 @@ public class Ship {
 
     public Ship() {}
 
+
+
     public Ship(String type, List<String> locations, GamePlayer gamePlayer) {
         this.type = type;
         this.locations = locations;
         this.gamePlayer = gamePlayer;
     }
 
-    public List<String> getLoactions() {
+    public List<String> getLocations() {
         return locations;
     }
 
-    public void setLoactions(List<String> loactions) {
-        this.locations = loactions;
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
     }
 
     public String getType() {
