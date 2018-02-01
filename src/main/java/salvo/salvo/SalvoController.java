@@ -161,8 +161,11 @@ public class SalvoController {
         gameMap.put("ships", gamePlayer.getShips().stream()
                 .map(ship -> shipInfo(ship))
                 .collect(toList()));
-        gameMap.put("salvos", gamePlayer.getGame().getGamePlayers().stream()
-                .map(gp -> salvoInfo(gp))
+        gameMap.put("salvos", gamePlayer.getSalvos().stream()
+                .map(salvo -> salvoInfo(salvo) )
+                .collect(toList()));
+        gameMap.put("salvosEnemy", gamePlayer.getGame().getGamePlayers().stream()
+                .map(gp -> enemySalvo(gp) )
                 .collect(toList()));
         return gameMap;
     }
@@ -172,17 +175,26 @@ public class SalvoController {
         shipMap.put("location", ship.getLocations());
         return shipMap;
     }
-    private List<Object> salvoInfo (GamePlayer gamePlayer) {
-        Set<Salvo> salvos = gamePlayer.getSalvos();
-        List<Object> listSalvo = new ArrayList<>();
-        for (Salvo salvo : salvos) {
-            Map<String,Object> salvoMap = new LinkedHashMap<>();
-            salvoMap.put("player",salvo.getGamePlayer().getId());
+    private Map<String,Object> salvoInfo (Salvo salvo) {
+        GamePlayer gamePlayer = salvo.getGamePlayer();
+        Map<String,Object> salvoMap = new LinkedHashMap<>();
+            salvoMap.put("player",gamePlayer.getId());
             salvoMap.put("turn",salvo.getTurn());
             salvoMap.put("location",salvo.getLocations());
-            listSalvo.add(salvoMap);
+        return salvoMap;
+    }
+    private List<Object> enemySalvo (GamePlayer gamePlayer){
+        List<Object> enemySalvo = new ArrayList();
+        Set<Salvo> salvos = gamePlayer.getSalvos();
+
+        for (Salvo salvo : salvos) {
+            Map<String,Object> enemySalvoMap = new LinkedHashMap<>();
+            enemySalvoMap.put("player", salvo.getGamePlayer().getId());
+            enemySalvoMap.put("turn",salvo.getTurn());
+            enemySalvoMap.put("location", salvo.getLocations());
+            enemySalvo.add(enemySalvoMap);
         }
-        return listSalvo;
+        return enemySalvo;
     }
     @RequestMapping("/game_view/{gamePlayerId}")
     public Map<String,Object> getGameMap (@PathVariable Long gamePlayerId) {
@@ -198,14 +210,20 @@ public class SalvoController {
                                                            @RequestBody Set<Ship> ships
                                                            ) {
         GamePlayer gamePlayer = gamePlayerRepo.getOne(gamePlayerId);
-
         for (Ship ship : ships) {
             ship.setGamePlayer(gamePlayer);
             shipRepo.save(ship);
         }
-
-
         return new ResponseEntity<>(makeMap("succed", "ship created"), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> createSalvos (@PathVariable Long gamePlayerId,
+                                                            @RequestBody Salvo salvo) {
+        GamePlayer gamePlayer = gamePlayerRepo.getOne(gamePlayerId);
+            salvo.setGamePlayer(gamePlayer);
+            salvoRepo.save(salvo);
+        return new ResponseEntity<>(makeMap("Shots", "Done"), HttpStatus.CREATED);
     }
 }
 

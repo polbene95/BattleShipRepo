@@ -1,4 +1,9 @@
+//////////////////////////////////////GLOBAL VAR///////////////////////////////////
 var gpID = getURL();
+
+var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+/////////////////////////////////////API CALLS////////////////////////////////////
 $(document).ready(function () {
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
         data = json;
@@ -8,7 +13,7 @@ $(document).ready(function () {
         displaySalvos();
 
         if (data.ships[0] != null) {
-
+            shotSalvos();
             $("#table-grid-enemy").show();
             $("#players").show();
             $("#place-ship").hide();
@@ -16,12 +21,15 @@ $(document).ready(function () {
             $("#drag2").hide();
             $("#drag3").hide();
             $("#drag4").hide();
+            $("#post-ship").hide();
+            $("#shoot").show();
 
         } else {
 
             $("#table-grid-enemy").hide();
             $("#players").hide();
             $(".btnHori").hide();
+            $("#shoot").hide();
 
         }
         //        placeShips();
@@ -29,23 +37,15 @@ $(document).ready(function () {
     });
 });
 
-var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
-var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-randomArray();
-
-console.log(randomArray);
-
-// Genrea un var que cambia el JSON que llega desde location.search, solo necesito el numero así que hago lo siguiente:
-// location.search nos da &gp=1
-// - .split("&")[0]: elimina el & y toma el valor sigueinte, es decir, gp=1;
-// - .split("=")[1]: elimina el = y toma el segundo valor.
-//La posicion que marco con[0] y [1], son lo que quiero tomar.
 function getURL() {
+    // Genrea un var que cambia el JSON que llega desde location.search, solo necesito el numero así que hago lo siguiente:
+    // location.search nos da &gp=1
+    // - .split("&")[0]: elimina el & y toma el valor sigueinte, es decir, gp=1;
+    // - .split("=")[1]: elimina el = y toma el segundo valor.
+    //La posicion que marco con[0] y [1], son lo que quiero tomar.
     var myGamePlayer = window.location.search.split("=")[1];
     return myGamePlayer;
 }
-
-// Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
 
 function reloadApiGames() {
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
@@ -54,10 +54,10 @@ function reloadApiGames() {
     })
 }
 
+///////////////////////////////////PRINT GRID AND PLAYERS/////////////////////////
+
 function crateGrid() {
-
-
-
+    // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
     var yourGrid = document.getElementById("table-grid-your");
     var enemyGrid = document.getElementById("table-grid-enemy");
     var ships = data.ships;
@@ -84,7 +84,6 @@ function crateGrid() {
                 for (l = 0; l < ships[k].location.length; l++) {
                     if (ships[k].location[l] == alphabet[i] + numbers[j]) {
                         colU.setAttribute("class", "ship-location");
-                        $("#my-ships").hide();
                     }
                 }
             }
@@ -113,32 +112,7 @@ function displayPlayers() {
     playersDiv.appendChild(h2Enemy);
 }
 
-function displaySalvos() {
-    var salvos = data.salvos;
-    for (i = 0; i < salvos.length; i++) {
-        for (j = 0; j < salvos[i].length; j++) {
-            var slavoLocation = salvos[i][j].location;
-            for (k = 0; k < slavoLocation.length; k++) {
-                if (salvos[i][j].player == data.gpid) {
-                    var myShots = slavoLocation[k];
-                    $("#E" + myShots).addClass("shotted");
-                    console.log(myShots);
-                }
-                if (salvos[i][j].player !== data.gpid) {
-                    var enemyShot = slavoLocation[k];
-                    if ($("#U" + enemyShot).hasClass("ship-location")) {
-                        $("#U" + enemyShot).addClass("succ-Shot");
-                    }
-                    if (!$("#U" + enemyShot).hasClass("ship-location")) {
-                        $("#U" + enemyShot).addClass("fail-Shot")
-                    }
-
-                }
-            }
-        }
-        console.log(slavoLocation);
-    }
-}
+//EXTRA FUNCTIONS
 
 function backButton() {
     var backButton = document.getElementById("back-button");
@@ -158,7 +132,7 @@ function randomArray() {
     console.log(randomArray);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////PLACE SHIPS////////////////////////////////////
 
 function getAllPositions() {
 
@@ -266,7 +240,7 @@ function getAllPositions() {
             .done(function (response) {
                 console.log(ships);
                 console.log(response)
-//                reloadApiGames();
+                //                reloadApiGames();
                 alert("Ships added: " + ships);
                 $("#table-grid-enemy").show();
                 $("#players").show();
@@ -275,7 +249,7 @@ function getAllPositions() {
                 $("#drag2").hide();
                 $("#drag3").hide();
                 $("#drag4").hide();
-            window.location.reload();
+                window.location.reload();
 
             })
             .fail(function () {
@@ -426,6 +400,145 @@ function drop(ev) {
     ev.target.appendChild(document.getElementById(data));
 }
 
+////////////////////////////////////DISPLAY SALVOS////////////////////////////////
+
+function displaySalvos() {
+    var salvos = data.salvosEnemy;
+    //    console.log(salvos);
+    for (i = 0; i < salvos.length; i++) {
+        for (j = 0; j < salvos[i].length; j++) {
+            var slavoLocation = salvos[i][j].location;
+            for (k = 0; k < slavoLocation.length; k++) {
+                if (salvos[i][j].player == data.gpid) {
+                    var myShots = slavoLocation[k];
+                    $("#E" + myShots).addClass("shotted");
+                    //                    console.log(myShots);
+                }
+                if (salvos[i][j].player !== data.gpid) {
+                    var enemyShot = slavoLocation[k];
+                    if ($("#U" + enemyShot).hasClass("ship-location")) {
+                        $("#U" + enemyShot).addClass("succ-Shot");
+                    }
+                    if (!$("#U" + enemyShot).hasClass("ship-location")) {
+                        $("#U" + enemyShot).addClass("fail-Shot")
+                    }
+
+                }
+                //                console.log(slavoLocation);
+            }
+        }
+    }
+}
+
+function shotSalvos() {
+
+    var turn = displayTurn();
+
+    for (i = 0; i < data.gameplayers.length; i++) {
+        if (data.gameplayers[i].id == data.gpid) {
+            var playerYou = data.gameplayers[i].player.email
+        } else {
+            var playerEnemy = data.gameplayers[i].player.email
+        }
+    }
+
+    var yourShots = [];
+    $(document).on("click", "#table-grid-enemy td", function (e) {
+
+        var select = $(this).attr('id');
+        $(this).addClass("selected-cell");
+        var char1 = select.charAt(1);
+        var char2 = select.charAt(2);
+        var toPush = char1 + char2;
+
+        yourShots.push(toPush);
+        //        console.log(select);
+        //        console.log(yourShots);
+    });
+
+    $("#shoot").on("click", function () {
+
+        if (yourShots[0] == yourShots[1] ||
+            yourShots[0] == yourShots[2] ||
+            yourShots[0] == yourShots[3] ||
+            yourShots[1] == yourShots[2] ||
+            yourShots[1] == yourShots[3] ||
+            yourShots[2] == yourShots[3]) {
+
+            console.log("ERROR CAN'T SHOOT SAME SPOT");
+            alert("ERROR CAN'T SHOOT SAME SPOT");
+            window.location.reload();
+
+        } else {
+
+            if (yourShots.length != 4) {
+
+                console.log("ERROR JUST DO 4 SHOTS");
+                alert("ERROR JUST DO 4 SHOTS");
+                window.location.reload();
+
+            } else {
+                var salvos = {
+                    turn: turn,
+                    locations: yourShots,
+
+                }
+                console.log(salvos)
+                $.post({
+                        url: "/api/games/players/" + gpID + "/salvos",
+                        data: JSON.stringify(salvos),
+                        dataType: "text",
+                        contentType: "application/json"
+                    })
+                    .done(function (response) {
+                        console.log(response)
+                        window.location.reload();
+                    })
+                    .fail(function () {
+                        console.log("error something is failing");
+                    });
+            }
+        }
+    })
+    $("#clean-grid").on("click", function () {
+        window.location.reload();
+    })
+}
+
+//////////////////////////TURN COUNTER/////////////////////
+
+function displayTurn() {
+    var salvos = data.salvosEnemy;
+    var pushTurn = [];
+    for (i = 0; i < salvos.length; i++) {
+        for (j = 0; j < salvos[i].length; j++) {
+            
+            var yourSalvos = salvos[i][j].player;
+
+            if (yourSalvos == gpID) {
+                
+                var turn;
+
+                if (turn !== undefined) {
+                    turn = salvos[i][j].turn;
+                } else {
+                    turn = 1;
+                }
+
+                parseInt(turn);
+                pushTurn.push(turn);
+                console.log(turn);
+            }
+            pushTurn.sort();
+            var lastTurn = Math.max.apply(null, pushTurn);
+        }
+    }
+    
+    console.log(pushTurn);
+    console.log("turn", lastTurn);
+
+    return lastTurn + 1;
+}
 
 
 
