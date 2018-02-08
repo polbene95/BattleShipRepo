@@ -11,6 +11,7 @@ $(document).ready(function () {
         crateGrid();
         displayPlayers();
         displaySalvos();
+        getHits();
 
         if (data.ships[0] != null) {
             shotSalvos();
@@ -57,7 +58,7 @@ function reloadApiGames() {
 ///////////////////////////////////PRINT GRID AND PLAYERS/////////////////////////
 
 function crateGrid() {
-    // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de //la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
+    // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
     var yourGrid = document.getElementById("table-grid-your");
     var enemyGrid = document.getElementById("table-grid-enemy");
     var ships = data.ships;
@@ -403,8 +404,8 @@ function drop(ev) {
 ////////////////////////////////////DISPLAY SALVOS////////////////////////////////
 
 function displaySalvos() {
-    var salvos = data.salvosEnemy;
-    //    console.log(salvos);
+    var salvos = data.salvos;
+    console.log(salvos);
     for (i = 0; i < salvos.length; i++) {
         for (j = 0; j < salvos[i].length; j++) {
             var slavoLocation = salvos[i][j].location;
@@ -508,15 +509,15 @@ function shotSalvos() {
 //////////////////////////TURN COUNTER/////////////////////
 
 function displayTurn() {
-    var salvos = data.salvosEnemy;
+    var salvos = data.salvos;
     var pushTurn = [];
     for (i = 0; i < salvos.length; i++) {
         for (j = 0; j < salvos[i].length; j++) {
-            
+
             var yourSalvos = salvos[i][j].player;
 
             if (yourSalvos == gpID) {
-                
+
                 var turn;
 
                 if (turn !== undefined) {
@@ -533,16 +534,48 @@ function displayTurn() {
             var lastTurn = Math.max.apply(null, pushTurn);
         }
     }
-    
+
     console.log(pushTurn);
     console.log("turn", lastTurn);
 
     return lastTurn + 1;
 }
 
+////////////////////////////////SUCCESFUL HIT////////////////////////////
+
+function getHits() {
+
+    var hits = data.hits;
+
+    for (var i = 0; i < hits.length; i++) {
+        var everyRound = hits[i];
+
+        if (everyRound != null) {
+            for (var j = 0; j < everyRound.length; j++) {
+                var succHit = everyRound[j];
+                $("#E" + succHit).addClass("succ-shot");
+
+            }
+        }
+    }
+}
+
+function showSunk() {
+    var history = data.history;
+    for (var i = 0; i < history.length; i++) {
+        var gamePlayerId = history[i].gamePlayerId;
+        var shipStatus = history[i].shipStatus;
+        for (var j = 0; j < shipStatus.length; j++) {
+            
+        var sunkShip = shipStatus[j].sunk;
+        var typeShip = .shipStatus[j].type;
+        }
 
 
 
+
+    }
+}
 
 
 

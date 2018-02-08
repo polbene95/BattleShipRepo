@@ -147,10 +147,10 @@ public class SalvoController {
         Map<String, Object> playerMap = new LinkedHashMap<>();
         playerMap.put("id", player.getId());
         playerMap.put("email", player.getUserName());
-
         return playerMap;
     }
     private Map<String, Object> gameViewInfo(GamePlayer gamePlayer){
+        sinkShip(gamePlayer);
         Map<String , Object> gameMap = new LinkedHashMap<>();
         gameMap.put("id", gamePlayer.getGame().getId());
         gameMap.put("gpid", gamePlayer.getId());
@@ -161,27 +161,123 @@ public class SalvoController {
         gameMap.put("ships", gamePlayer.getShips().stream()
                 .map(ship -> shipInfo(ship))
                 .collect(toList()));
-        gameMap.put("salvos", gamePlayer.getSalvos().stream()
-                .map(salvo -> salvoInfo(salvo) )
-                .collect(toList()));
-        gameMap.put("salvosEnemy", gamePlayer.getGame().getGamePlayers().stream()
+        gameMap.put("salvos", gamePlayer.getGame().getGamePlayers().stream()
                 .map(gp -> enemySalvo(gp) )
                 .collect(toList()));
+        gameMap.put("history", gamePlayer.getGame().getGamePlayers().stream()
+                .map(gp -> shipLocEnemyInfo(gp))
+                .collect(toList()));
+        gameMap.put("hits", gamePlayer.getSalvos().stream()
+                .map(salvo -> getHits(salvo))
+                .collect(toList()));
+
         return gameMap;
     }
+
+    private GamePlayer getEnemyPlayer(GamePlayer gamePlayer) {
+
+        //Creamos 3 variables: el id del gamePlayer que vemos ahora, el game en el que juega dicho player y los gamePlayers del game
+        Long playerId = gamePlayer.getId();
+        Game game = gamePlayer.getGame();
+        Set<GamePlayer> gamePlayers = game.getGamePlayers();
+
+        //Ahora para cojer el otro gamePlayer simplemente comparamos el id de los gamePlayers con la primera variable que hemos creado,
+        // cuando fialtramos lo que le decimos que nos coja el id del gamePlayer que no coincida con la primera variable que declaramos.
+        GamePlayer enemyPlayer = gamePlayers.stream()
+                .filter(gp -> gp.getId() != playerId).findAny().orElse(null);
+
+        return enemyPlayer;
+    }
+    private List<String> getShipsLocations(GamePlayer gamePlayer) {
+        //Agrupamos todos los ship de un gamePlayer en un Set
+        Set<Ship> ships = gamePlayer.getShips();
+        //De ese Set cojeremos la location de los ship y crearemos un flatMap que nos permite pasar todas las location en un solo grupo de locations, es decir,
+        // si tenemos [h1,h2,h3],[b1,b2,b3],[j1,j2,j3] pasamos a [h1,h2,h3,b1,b2,b3,j1,j2,j3]. Usamos de nomenclatura cells (celda de la tabla).
+        return ships.stream()
+                .map(ship -> ship.getLocations())
+                .flatMap(cells -> cells.stream()).collect(toList());
+    }
+    private List<String> getSalvoLocations(GamePlayer gamePlayer) {
+        //Al igual que con las locations de los Ship ahora lo hacemos con los salvos, para más adelante poder comparar ambos flatMaps.
+        return gamePlayer.getSalvos().stream()
+                .map(salvo -> salvo.getLocations())
+                .flatMap(cells -> cells.stream()).collect(toList());
+    }
+    private List<String> getHits(Salvo salvo) {
+        //En este metodo vamos a comprobar si el salvo es hit o fail.
+        //Lo primero es cojer los salvos del gamePlayer contrario a nosotros.
+        GamePlayer enemy = getEnemyPlayer(salvo.getGamePlayer());
+        //Si dicho enemigo existe (no estamos esperando que se una otro gamePlayer)
+        if (enemy != null) {
+
+            //Cojemos nustros salvos y los barcos del enemigo y miramos para todos nuestros salvos si alguno de sus barcos tiene la misma cell.
+            //Si la contiene return dicha cell para, desde el front, poder pintarla.
+            List<String> salvoLocations = salvo.getLocations();
+            List<String> ShipLocations = getShipsLocations(enemy);
+
+            return salvoLocations.stream()
+                    .filter(cell -> ShipLocations.contains(cell))
+                    .collect(toList());
+        } else return null;
+    }
+
+    private boolean shipIsSunk(List<String> playerSalvos, Ship ship) {
+        //Ahora miramos si la location de un Ship coincide con los salvos que hemos realizado con el .allMatch()
+        boolean shipIsSunk = ship.getLocations().stream()
+                .allMatch(locations -> playerSalvos.contains(locations));
+                if (shipIsSunk) {
+                    ship.setSunk(true);
+                    shipRepo.save(ship);
+                }
+        return shipIsSunk;
+    }
+
+    private void sinkShip(GamePlayer gamePlayer) {
+        GamePlayer enemy = getEnemyPlayer(gamePlayer);
+
+        //Si, viniendo del metodo anterior, los salvos coinciden con la location de un ship,
+        // cambiamos el sunk por true, infromandonos que el barco esta undido.
+
+        if (enemy != null) {
+            GamePlayer enemyPlayer = getEnemyPlayer(gamePlayer);
+            Set<Ship> enemyShips = enemyPlayer.getShips();
+            List<String> playerSalvos = getSalvoLocations(gamePlayer);
+
+            enemyShips.stream().filter(ship -> !ship.isSunk())
+                    .forEach(ship -> {
+                        shipIsSunk(playerSalvos, ship);
+
+
+
+                    });
+        }
+
+    }
+
+    private Map<String, Object> shipLocEnemyInfo (GamePlayer gamePlayer) {
+        Map<String, Object> gamePlayerMap = new HashMap<>();
+
+        gamePlayerMap.put("gamePlayerId", gamePlayer.getId());
+        gamePlayerMap.put("shipStatus", gamePlayer.getShips().stream()
+                        .map(ship -> shipLocInfo(ship))
+                        .collect(toList()));
+
+
+        return gamePlayerMap;
+    }
+    private Map<String,Object> shipLocInfo (Ship ship) {
+        Map<String,Object> shipMap = new LinkedHashMap<>();
+
+        shipMap.put("type", ship.getType());
+        shipMap.put("sunk", ship.isSunk());
+        return shipMap;
+    }
+
     private Map<String,Object> shipInfo (Ship ship) {
         Map<String,Object> shipMap = new LinkedHashMap<>();
         shipMap.put("type", ship.getType());
         shipMap.put("location", ship.getLocations());
         return shipMap;
-    }
-    private Map<String,Object> salvoInfo (Salvo salvo) {
-        GamePlayer gamePlayer = salvo.getGamePlayer();
-        Map<String,Object> salvoMap = new LinkedHashMap<>();
-            salvoMap.put("player",gamePlayer.getId());
-            salvoMap.put("turn",salvo.getTurn());
-            salvoMap.put("location",salvo.getLocations());
-        return salvoMap;
     }
     private List<Object> enemySalvo (GamePlayer gamePlayer){
         List<Object> enemySalvo = new ArrayList();
@@ -196,6 +292,7 @@ public class SalvoController {
         }
         return enemySalvo;
     }
+
     @RequestMapping("/game_view/{gamePlayerId}")
     public Map<String,Object> getGameMap (@PathVariable Long gamePlayerId) {
         Map<String,Object> gamePlayerIdMap = gameViewInfo(gamePlayerRepo.getOne(gamePlayerId));
@@ -216,7 +313,6 @@ public class SalvoController {
         }
         return new ResponseEntity<>(makeMap("succed", "ship created"), HttpStatus.CREATED);
     }
-
     @RequestMapping(path = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
     public ResponseEntity<Map<String,Object>> createSalvos (@PathVariable Long gamePlayerId,
                                                             @RequestBody Salvo salvo) {
@@ -226,5 +322,10 @@ public class SalvoController {
         return new ResponseEntity<>(makeMap("Shots", "Done"), HttpStatus.CREATED);
     }
 }
+
+
+
+
+
 
 

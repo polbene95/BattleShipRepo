@@ -34,20 +34,23 @@ function printList() {
             var col = document.createElement("td");
             var email = data[i].email;
             var score = data[i].gameplayers[j].score;
+            if (data[i].gameplayers[0].score != null) {
 
-            totalScore += score;
-            if (score == 1) {
-                winArr.push(score);
-                winNum = winArr.length;
+                totalScore += score;
+                if (score == 1) {
+                    winArr.push(score);
+                    winNum = winArr.length;
+                }
+                if (score == 0) {
+                    loseArr.push(score);
+                    loseNum = loseArr.length;
+                }
+                if (score == 0.5) {
+                    tieArr.push(score);
+                    tieNum = tieArr.length;
+                }
             }
-            if (score == 0) {
-                loseArr.push(score);
-                loseNum = loseArr.length;
-            }
-            if (score == 0.5) {
-                tieArr.push(score);
-                tieNum = tieArr.length;
-            }
+
             row.insertCell().innerHTML = email;
             row.insertCell().innerHTML = totalScore;
             row.insertCell().innerHTML = winNum;
