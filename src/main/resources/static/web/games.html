@@ -24,14 +24,17 @@
                     <div>
                         <h3 id="welcome-txt"></h3>
                     </div>
-                    <button type="button" class="btn" id="logoutbut" onclick="logout()">Log out</button>
+                    <div>
+                        <button type="button" class="btn" id="logoutbut" onclick="logout()">Log out</button>
+                        <button id="create-game" class="btn" onclick="createGame()">Create New Game</button>
+                    </div>
                 </div>
             </div>
-            
+
             <div class="title">
                 <h1>Rank Table</h1>
             </div>
-            
+
         </header>
         <div class="body">
             <table id="rank-table" class="table-bordered">
@@ -46,9 +49,6 @@
                 </thead>
                 <tbody id="tbody"></tbody>
             </table>
-        </div>
-        <div>
-            <button id="create-game" class="btn" onclick="createGame()">Create New Game</button>
         </div>
         <div class="body">
             <table id="list-table" class="table-bordered">

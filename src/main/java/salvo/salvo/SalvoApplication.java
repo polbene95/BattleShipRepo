@@ -62,6 +62,8 @@ public class SalvoApplication {
 			List<String> loc4 = Arrays.asList("H1", "H2");
 			List<String> loc5 = Arrays.asList("H4", "H5");
 			List<String> loc6 = Arrays.asList("H6", "H7");
+			List<String> loc7 = Arrays.asList("H8", "H9");
+			List<String> loc8 = Arrays.asList("A1");
 
 			List<String> salvoLoc1 = Arrays.asList("H1","B5","G7");
 			List<String> salvoLoc2 = Arrays.asList("A8","A7","A6");
@@ -76,9 +78,11 @@ public class SalvoApplication {
 			Ship s1 = shipRepository.save(new Ship("cruiser", loc1, gp1));
 			Ship s2 = shipRepository.save(new Ship("destructor",loc2, gp1));
 			Ship s3 = shipRepository.save(new Ship("boat",loc3,gp1));
+			Ship s7 = shipRepository.save(new Ship("boat",loc7,gp1));
 			Ship s4 = shipRepository.save(new Ship("cruiser", loc4, gp2));
 			Ship s5 = shipRepository.save(new Ship("destructor",loc5, gp2));
 			Ship s6 = shipRepository.save(new Ship("boat",loc6,gp2));
+			Ship s8 = shipRepository.save(new Ship("boat",loc8,gp2));
 
 			Score scoreGP1 = scoreRepository.save(new Score(1,p1, g1));
 			Score scoreGP2 = scoreRepository.save(new Score(0,p2, g1));

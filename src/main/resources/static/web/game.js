@@ -5,13 +5,12 @@ var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
 var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 /////////////////////////////////////API CALLS////////////////////////////////////
 $(document).ready(function () {
+    $("#ended-game").hide();
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
         data = json;
         console.log(data);
         crateGrid();
-        displayPlayers();
-        displaySalvos();
-        getHits();
+        turnLogic();
 
         if (data.ships[0] != null) {
             shotSalvos();
@@ -24,6 +23,10 @@ $(document).ready(function () {
             $("#drag4").hide();
             $("#post-ship").hide();
             $("#shoot").show();
+            displayPlayers();
+            displaySalvos();
+            getHits();
+            showSunk();
 
         } else {
 
@@ -53,6 +56,33 @@ function reloadApiGames() {
         data = json;
         crateGrid();
     })
+}
+
+///////////////////////////////////EXTRA FUNCTIONS////////////////////////////////
+
+function backButton() {
+    var backButton = document.getElementById("back-button");
+    backButton.setAttribute("href", "/web/games.html");
+}
+
+function randomArray() {
+
+    var randomArray = [];
+    for (i = 0; i < alphabet.length; i++) {
+        for (j = 0; j < numbers.length; j++) {
+            var position = alphabet[i] + numbers[j];
+            randomArray.push(position);
+        }
+    }
+    return randomArray;
+    console.log(randomArray);
+}
+
+function displayBlockDiv() {
+    
+    var displyBlock = document.createElement("block-div");
+    
+    
 }
 
 ///////////////////////////////////PRINT GRID AND PLAYERS/////////////////////////
@@ -111,26 +141,6 @@ function displayPlayers() {
     h2Enemy.innerHTML = "(enemy)" + playerEnemy;
     playersDiv.appendChild(h2You);
     playersDiv.appendChild(h2Enemy);
-}
-
-//EXTRA FUNCTIONS
-
-function backButton() {
-    var backButton = document.getElementById("back-button");
-    backButton.setAttribute("href", "/web/games.html");
-}
-
-function randomArray() {
-
-    var randomArray = [];
-    for (i = 0; i < alphabet.length; i++) {
-        for (j = 0; j < numbers.length; j++) {
-            var position = alphabet[i] + numbers[j];
-            randomArray.push(position);
-        }
-    }
-    return randomArray;
-    console.log(randomArray);
 }
 
 ////////////////////////////////////PLACE SHIPS////////////////////////////////////
@@ -506,7 +516,7 @@ function shotSalvos() {
     })
 }
 
-//////////////////////////TURN COUNTER/////////////////////
+///////////////////////////////////TURN COUNTER//////////////////////////////////
 
 function displayTurn() {
     var salvos = data.salvos;
@@ -541,7 +551,7 @@ function displayTurn() {
     return lastTurn + 1;
 }
 
-////////////////////////////////SUCCESFUL HIT////////////////////////////
+////////////////////////////////SUCCESFUL HIT/////////////////////////////////////
 
 function getHits() {
 
@@ -561,23 +571,142 @@ function getHits() {
 }
 
 function showSunk() {
+    var sunkNumHost = [];
+    var sunkNumEnem = [];
     var history = data.history;
     for (var i = 0; i < history.length; i++) {
         var gamePlayerId = history[i].gamePlayerId;
         var shipStatus = history[i].shipStatus;
         for (var j = 0; j < shipStatus.length; j++) {
-            
-        var sunkShip = shipStatus[j].sunk;
-        var typeShip = .shipStatus[j].type;
+            var sunkShip = shipStatus[j].sunk;
+            var typeShip = shipStatus[j].type;
+            if (sunkShip == true) {
+                console.log(gamePlayerId, typeShip, "sunk");
+                if (gamePlayerId == gpID) {
+                    sunkNumHost.push(typeShip);
+                }
+                if (gamePlayerId != gpID) {
+                    sunkNumEnem.push(typeShip);
+                }
+            }
         }
-
-
-
-
+    }
+    console.log("Your Falled Ships", sunkNumHost);
+    console.log("Enemy Falled Ships", sunkNumEnem);
+    //////////////////////////////////GAME OVER////////////////////////////
+    if (sunkNumHost.length == 4 || sunkNumEnem.length == 4) {
+        console.log("GAME OVER");
+        $(".table-div").css({
+            'z-index': '-1'
+        })
+        $(".table-div").css({
+            'opacity': '0.3'
+        })
+        $("#clean-grid").hide();
+        $("#shoot").hide();
+        $("#ended-game").show();
+        if (sunkNumHost.length == 4) {
+            console.log("You Lose");
+            $("#ended-game h1").text("You Lose");
+        }
+        if (sunkNumEnem.length == 4) {
+            console.log("You Win");
+            $("#ended-game h1").text("You Win");
+        }
     }
 }
 
+////////////////////////////////////LOGIC////////////////////////////////////
 
+///////////////TURN LOGIC/////////////
+
+function turnLogic() {
+    
+    var gamePlayers = data.gameplayers;
+    var salvos = data.salvos;
+
+    for (let i = 0; i < gamePlayers.length; i++) {
+
+        var gamePlayerId = gamePlayers[i].id;
+
+        if (gamePlayerId == gpID) {
+            var playerHostId = gamePlayers[i].player.id;
+            var gpHostId = gamePlayers[i].id;
+        } else {
+            var playerEnemyId = gamePlayers[i].player.id;
+            var gpEnemyId = gamePlayers[i].id;
+        }
+    }
+    //Si el valor es 0 lo creo el enemigo, si es 1 lo creo el mismo host
+    var howCreatedTheGame;
+    if (gpHostId > gpEnemyId) {
+        howCreatedTheGame = 1;
+        console.log("I created the game")
+    }
+    if (gpHostId < gpEnemyId) {
+        howCreatedTheGame = 0;
+        console.log("Enemy created the game")
+    }
+    var userTurns = [];
+    var enemyTurns = [];
+    for (let i = 0; i < salvos.length; i++) {
+        for (var j = 0; j < salvos[i].length; j++) {
+
+            var playerId = salvos[i][j].player;
+            if (playerId == playerHostId) {
+                var userTurn = salvos[i][j].turn;
+                userTurns.push(userTurn);
+            }
+            if (playerId == playerEnemyId) {
+                var enemyTurn = salvos[i][j].turn;
+                enemyTurns.push(enemyTurn);
+            }
+        }
+    }
+    if (enemyTurns.length < userTurns.length) {
+        console.log("1.0", "enemyTurn");
+         $(".table-div").css({
+            'z-index': '-1'
+        })
+        $(".table-div").css({
+            'opacity': '0.3'
+        })
+        $("#shoot").hide();
+        $("#block-div").show();
+        
+    } else if (enemyTurns.length > userTurns.length) {
+        console.log("2.0", "yourTurn");
+        $("#shoot").show();
+        $("#block-div").hide();
+        $(".table-div").css({
+            'z-index': '1'
+        })
+        $(".table-div").css({
+            'opacity': '1'
+        })
+    } else if (enemyTurns.length === userTurns.length && howCreatedTheGame == 0) {
+        console.log("3.0", "yourTurn");
+        $("#shoot").show();
+        $("#block-div").hide();
+         $(".table-div").css({
+            'z-index': '1'
+        })
+        $(".table-div").css({
+            'opacity': '1'
+        })
+    } else if (enemyTurns.length === userTurns.length && howCreatedTheGame == 1) {
+        console.log("4.0", "enemyTurn");
+         $(".table-div").css({
+            'z-index': '-1'
+        })
+        $(".table-div").css({
+            'opacity': '0.3'
+        })
+        $("#shoot").hide();
+        $("#block-div").show();
+        
+    }
+}
 
 
 //
