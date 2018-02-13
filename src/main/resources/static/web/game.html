@@ -15,8 +15,8 @@
 
                 <div id="my-ships">
                     <button class="btn" id="post-ship" onclick="getAllPositions()"> Ready </button>
-                    <button class="btn" id="shoot" > SHOOT EM UP </button>
-                    <button class="btn" id="clean-grid" > Clean Grid </button>
+                    <button class="btn" id="shoot"> SHOOT EM UP </button>
+                    <button class="btn" id="clean-grid"> Clean Grid </button>
                 </div>
             </div>
             <div class="title">
@@ -28,17 +28,24 @@
             <h1></h1>
         </div>
         <div id="block-div">
-            <h1>Wait For Enemy</h1>
+            <div>
+                <h1>Waiting For Enemy</h1>
+            </div>
         </div>
         <div class="table-div">
             <table id="table-grid-your" ondrop="drop(event)" ondragover="allowDrop(event)">
             </table>
             <table id="table-grid-enemy"></table>
             <div id="place-ship">
+               <br>
+               <br>
+               <br>
                 <div id="drag1" draggable="true" ondragstart="drag(event)">
                     <button class="btn btnVert" onclick="rotateToVert('#drag1')"></button>
                     <button class="btn btnHori" onclick="rotateToHoriz('#drag1')"></button>
                 </div>
+                <br>
+                <br>
                 <br>
                 <br>
                 <br>
@@ -49,10 +56,14 @@
                 <br>
                 <br>
                 <br>
+                <br>
+                <br>
                 <div id="drag3" draggable="true" ondragstart="drag(event)">
                     <button class="btn btnVert" onclick="rotateToVert('#drag3')"></button>
                     <button class="btn btnHori" onclick="rotateToHoriz('#drag3')"></button>
                 </div>
+                <br>
+                <br>
                 <br>
                 <br>
                 <br>

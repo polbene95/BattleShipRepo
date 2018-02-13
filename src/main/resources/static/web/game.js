@@ -4,36 +4,57 @@ var gpID = getURL();
 var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
 var numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 /////////////////////////////////////API CALLS////////////////////////////////////
+
+$("#ended-game").hide();
+$("#block-div").hide();
+$("#place-ship").hide();
+$("#drag1").hide();
+$("#drag2").hide();
+$("#drag3").hide();
+$("#drag4").hide();
+$("#post-ship").hide();
+
+
 $(document).ready(function () {
-    $("#ended-game").hide();
+
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
         data = json;
         console.log(data);
-        crateGrid();
         turnLogic();
+        waitingForEnemy();
 
         if (data.ships[0] != null) {
             shotSalvos();
             $("#table-grid-enemy").show();
             $("#players").show();
-            $("#place-ship").hide();
-            $("#drag1").hide();
-            $("#drag2").hide();
-            $("#drag3").hide();
-            $("#drag4").hide();
-            $("#post-ship").hide();
             $("#shoot").show();
+
             displayPlayers();
+            crateGrid();
+            printShips();
             displaySalvos();
             getHits();
             showSunk();
 
+//            setTimeout(function () {
+//                window.location.reload();
+//            }, 3000);
+
         } else {
+            crateGrid();
+
+            $("#place-ship").show();
+            $("#drag1").show();
+            $("#drag2").show();
+            $("#drag3").show();
+            $("#drag4").show();
+            $("#post-ship").show();
 
             $("#table-grid-enemy").hide();
             $("#players").hide();
             $(".btnHori").hide();
             $("#shoot").hide();
+
 
         }
         //        placeShips();
@@ -54,7 +75,8 @@ function getURL() {
 function reloadApiGames() {
     $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
         data = json;
-        crateGrid();
+        //        $("#block-div").hide();
+        //        crateGrid();
     })
 }
 
@@ -78,20 +100,12 @@ function randomArray() {
     console.log(randomArray);
 }
 
-function displayBlockDiv() {
-    
-    var displyBlock = document.createElement("block-div");
-    
-    
-}
-
 ///////////////////////////////////PRINT GRID AND PLAYERS/////////////////////////
 
 function crateGrid() {
     // Crea las tablas, ademas les assigna un id ( U si es la tabla del player-view y E si es el player-enemy) en funcion de la posicion de la celda. La segunda parte assigna una clase ship-location en las celdas donde hay un barco.
     var yourGrid = document.getElementById("table-grid-your");
     var enemyGrid = document.getElementById("table-grid-enemy");
-    var ships = data.ships;
     for (i = 0; i < alphabet.length; i++) {
         var rowU = document.createElement("tr");
         var rowE = document.createElement("tr");
@@ -111,13 +125,13 @@ function crateGrid() {
             colE.id = "E" + alphabet[i] + numbers[j];
             parU.innerHTML = alphabet[i] + numbers[j];
             parE.innerHTML = alphabet[i] + numbers[j];
-            for (k = 0; k < ships.length; k++) {
-                for (l = 0; l < ships[k].location.length; l++) {
-                    if (ships[k].location[l] == alphabet[i] + numbers[j]) {
-                        colU.setAttribute("class", "ship-location");
-                    }
-                }
-            }
+            //            for (k = 0; k < ships.length; k++) {
+            //                for (l = 0; l < ships[k].location.length; l++) {
+            //                    if (ships[k].location[l] == alphabet[i] + numbers[j]) {
+            //                        colU.setAttribute("class", "ship-location");
+            //                    }
+            //                }
+            //            }
         }
         yourGrid.appendChild(rowU);
         enemyGrid.appendChild(rowE);
@@ -144,6 +158,23 @@ function displayPlayers() {
 }
 
 ////////////////////////////////////PLACE SHIPS////////////////////////////////////
+
+function printShips() {
+    var ships = data.ships;
+    for (i = 0; i < alphabet.length; i++) {
+        for (j = 0; j < numbers.length; j++) {
+            var thisPosition = alphabet[i] + numbers[j];
+            for (k = 0; k < ships.length; k++) {
+                for (l = 0; l < ships[k].location.length; l++) {
+                    if (ships[k].location[l] == alphabet[i] + numbers[j]) {
+                        $("#U" + thisPosition).addClass("ship-location");
+                    }
+                }
+            }
+        }
+
+    }
+}
 
 function getAllPositions() {
 
@@ -621,7 +652,7 @@ function showSunk() {
 ///////////////TURN LOGIC/////////////
 
 function turnLogic() {
-    
+
     var gamePlayers = data.gameplayers;
     var salvos = data.salvos;
 
@@ -637,6 +668,9 @@ function turnLogic() {
             var gpEnemyId = gamePlayers[i].id;
         }
     }
+    
+    console.log("playerHost", playerHostId);
+    console.log("playerEne", playerEnemyId);
     //Si el valor es 0 lo creo el enemigo, si es 1 lo creo el mismo host
     var howCreatedTheGame;
     if (gpHostId > gpEnemyId) {
@@ -653,58 +687,55 @@ function turnLogic() {
         for (var j = 0; j < salvos[i].length; j++) {
 
             var playerId = salvos[i][j].player;
-            if (playerId == playerHostId) {
+            console.log("playerID",playerId);
+            if (playerId == gpHostId) {
+                console.log("hey ya !!");
                 var userTurn = salvos[i][j].turn;
                 userTurns.push(userTurn);
             }
-            if (playerId == playerEnemyId) {
+            if (playerId == gpEnemyId) {
+                console.log("hhhihihi");
                 var enemyTurn = salvos[i][j].turn;
                 enemyTurns.push(enemyTurn);
             }
         }
     }
+    console.log("E ", enemyTurns, "U ", userTurns);
+    var waitingTurn;
     if (enemyTurns.length < userTurns.length) {
         console.log("1.0", "enemyTurn");
-         $(".table-div").css({
-            'z-index': '-1'
-        })
-        $(".table-div").css({
-            'opacity': '0.3'
-        })
-        $("#shoot").hide();
-        $("#block-div").show();
-        
+        waitingTurn = 1;
     } else if (enemyTurns.length > userTurns.length) {
         console.log("2.0", "yourTurn");
-        $("#shoot").show();
-        $("#block-div").hide();
-        $(".table-div").css({
-            'z-index': '1'
-        })
-        $(".table-div").css({
-            'opacity': '1'
-        })
+        waitingTurn = 0;
     } else if (enemyTurns.length === userTurns.length && howCreatedTheGame == 0) {
         console.log("3.0", "yourTurn");
-        $("#shoot").show();
-        $("#block-div").hide();
-         $(".table-div").css({
-            'z-index': '1'
-        })
-        $(".table-div").css({
-            'opacity': '1'
-        })
+        waitingTurn = 0;
     } else if (enemyTurns.length === userTurns.length && howCreatedTheGame == 1) {
         console.log("4.0", "enemyTurn");
-         $(".table-div").css({
-            'z-index': '-1'
-        })
-        $(".table-div").css({
-            'opacity': '0.3'
-        })
+        waitingTurn = 1;
+    }
+
+    if (waitingTurn === 1) {
+        console.log("hola");
         $("#shoot").hide();
-        $("#block-div").show();
-        
+        $('#table-grid-enemy').on("click", function () {
+            $("#block-div").show();
+        });
+    } else {
+        $("#block-div").hide();
+    }
+}
+
+function waitingForEnemy() {
+    
+    var gameplayers = data.gameplayers;
+    if (gameplayers.length < 2) {
+        console.log("waiting for enemy");
+        $('#table-grid-enemy').on("click", function () {
+            $("#block-div").show();
+            $("#shoot").hide();
+        });    
     }
 }
 
