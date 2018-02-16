@@ -1,19 +1,30 @@
 $(document).ready(function () {
     $("#logout-form").hide();
+    $("#list-table").hide();
+    mainPageNav();
+    
     $.getJSON("http://localhost:8080/api/leaderboard", function (json) {
         data = json;
         printList();
-        $('#rank-table').DataTable();
+        $('#rank-table').show();
+//        $('#games-button').hide();
+        $('#rank-table').DataTable({
+            "order": [[1, "desc"]]
+        });
     });
-    $("#list-table").hide();
-    reloadApiGames();
+    $.getJSON("http://localhost:8080/api/games", function (json) {
+        data2 = json;
+        printGameList();
+        userLoged();
+    })
+//    reloadApiGames();
 });
 
 function reloadApiGames() {
     $.getJSON("http://localhost:8080/api/games", function (json) {
         data2 = json;
-        printGameList();
-        userLoged();
+//        printGameList();
+//        userLoged();
     })
 }
 
@@ -34,12 +45,14 @@ function printList() {
             var col = document.createElement("td");
             var email = data[i].email;
             var score = data[i].gameplayers[j].score;
-            if (data[i].gameplayers[0].score != null) {
+            console.log("score",score);
+            if (data[i].gameplayers[j].score != null) {
 
                 totalScore += score;
                 if (score == 1) {
                     winArr.push(score);
                     winNum = winArr.length;
+                    console.log("imin");
                 }
                 if (score == 0) {
                     loseArr.push(score);
@@ -57,12 +70,12 @@ function printList() {
             row.insertCell().innerHTML = loseNum;
             row.insertCell().innerHTML = tieNum;
         }
-        console.log(score);
+//        console.log(score);
         tbody.append(row);
     }
-    console.log(winArr);
-    console.log(loseArr);
-    console.log(tieArr);
+//    console.log(winArr);
+//    console.log(loseArr);
+//    console.log(tieArr);
 }
 
 function login() {
@@ -81,6 +94,7 @@ function login() {
             $("#login-form").hide();
             $("#logout-form").show();
             $("#list-table").show();
+            
         })
         .fail(function () {
             alert("Invalid User or Password");
@@ -193,11 +207,13 @@ function createGame() {
             for (i = 0; i < games.length; i++) {
                 for (j = 0; j < games[i].gameplayers.length; j++) {
                     var newGamePlayerId = games[games.length - 1].gameplayers[0].id;
-                    createGameButton.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + newGamePlayerId);
+                    window.location.href = "http://localhost:8080/web/game.html?gp=" + newGamePlayerId;
+//                    createGameButton.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + newGamePlayerId);
                     console.log(newGamePlayerId);
                 }
             }
-            location.reload();
+            reloadApiGames();
+//            location.reload();
             console.log("done");
 
         })
@@ -211,7 +227,9 @@ function userLoged() {
     if (data2.player !== null) {
         $("#login-form").hide();
         $("#logout-form").show();
-        $("#list-table").show();
+//        $("#list-table").show();
+        $('#games-button').show();
+        $('#list-table').hide();
 
         var nameTxt = document.getElementById("welcome-txt");
         nameTxt.innerHTML = "Welcome " + user;
@@ -230,4 +248,22 @@ function joinGame(gameId) {
     }).fail(function () {
         console.log("fail join");
     })
+}
+
+function mainPageNav() {
+
+    $("#rank-button").on("click", function () {
+        $(".title h1").text("");
+        $(".title h1").text("Rank Table");
+        $("#list-table").hide();
+        $("#rank-table").show();
+    });
+    
+    $("#games-button").on("click", function () {
+        $(".title h1").text("");
+        $(".title h1").text("List of Games");
+        $("#rank-table").hide();
+        $("#list-table").show();
+    })
+
 }

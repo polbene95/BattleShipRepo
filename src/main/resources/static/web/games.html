@@ -24,18 +24,30 @@
                     <div>
                         <h3 id="welcome-txt"></h3>
                     </div>
-                    <div>
-                        <button type="button" class="btn" id="logoutbut" onclick="logout()">Log out</button>
-                        <button id="create-game" class="btn" onclick="createGame()">Create New Game</button>
+                    <div class="nav-buttons">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                              <span class="glyphicon glyphicon-menu-hamburger"></span></button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a type="button" class="btn" id="logoutbut" onclick="logout()">Log out</a>
+                                </li>
+                                <li>
+                                    <a id="create-game" class="btn" onclick="createGame()">Create New Game</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="rank-games">
+                            <button type="button" class="btn" id="rank-button" checked="true">Rank Table</button>
+                            <button type="button" class="btn" id="games-button">Games Table</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="title">
-                <h1>Rank Table</h1>
-            </div>
-
         </header>
+        <div class="title">
+            <h1>Rank Table</h1>
+        </div>
         <div class="body">
             <table id="rank-table" class="table-bordered">
                 <thead>

@@ -189,17 +189,17 @@ td:hover {
     font: 50px bold red;
     background-color: lightcoral;
     border: dotted red;
-    animation-name: parpadeo;
+    animation-name: blink-warning;
     animation-duration: 1s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
-    -webkit-animation-name: parpadeo;
+    -webkit-animation-name: blink-warning;
     -webkit-animation-duration: 1s;
     -webkit-animation-timing-function: linear;
     -webkit-animation-iteration-count: infinite;
 }
 
-@-moz-keyframes parpadeo {
+@-moz-keyframes blink-warning {
     0% {
         opacity: 1.0;
     }
@@ -211,7 +211,7 @@ td:hover {
     }
 }
 
-@-webkit-keyframes parpadeo {
+@-webkit-keyframes blink-warning {
     0% {
         opacity: 1.0;
     }
@@ -223,12 +223,59 @@ td:hover {
     }
 }
 
-@keyframes parpadeo {
+@keyframes blink-warning {
     0% {
         opacity: 1.0;
     }
     50% {
         opacity: 0.0;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+.player-turn{
+     
+animation-name: blink-grid;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: blink-grid;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blink-grid {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes blink-grid {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@keyframes blink-grid {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.7;
     }
     100% {
         opacity: 1.0;

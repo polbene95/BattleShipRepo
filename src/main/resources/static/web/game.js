@@ -36,9 +36,9 @@ $(document).ready(function () {
             getHits();
             showSunk();
 
-//            setTimeout(function () {
-//                window.location.reload();
-//            }, 3000);
+            //            setTimeout(function () {
+            //                window.location.reload();
+            //            }, 3000);
 
         } else {
             crateGrid();
@@ -643,6 +643,24 @@ function showSunk() {
         if (sunkNumEnem.length == 4) {
             console.log("You Win");
             $("#ended-game h1").text("You Win");
+//            var score = {
+//                score: 1
+//            };
+//            $.post({
+//                    url: "api/games/player/" + gpID + "/scores",
+//                    data: JSON.stringify({score: 1.0}),
+//                    dataType: "text",
+//                    contentType: "application/json"
+//                })
+//                .done(function (response) {
+//                    console.log(score);
+//                    console.log(response)
+//                    
+//
+//                })
+//                .fail(function () {
+//                    console.log("error something is failing");
+//                })
         }
     }
 }
@@ -668,17 +686,17 @@ function turnLogic() {
             var gpEnemyId = gamePlayers[i].id;
         }
     }
-    
+
     console.log("playerHost", playerHostId);
     console.log("playerEne", playerEnemyId);
     //Si el valor es 0 lo creo el enemigo, si es 1 lo creo el mismo host
     var howCreatedTheGame;
-    if (gpHostId > gpEnemyId) {
-        howCreatedTheGame = 1;
+    if (gpHostId > gpEnemyId || gpEnemyId == null) {
+        whoCreatedTheGame = 1;
         console.log("I created the game")
     }
     if (gpHostId < gpEnemyId) {
-        howCreatedTheGame = 0;
+        whoCreatedTheGame = 0;
         console.log("Enemy created the game")
     }
     var userTurns = [];
@@ -687,7 +705,7 @@ function turnLogic() {
         for (var j = 0; j < salvos[i].length; j++) {
 
             var playerId = salvos[i][j].player;
-            console.log("playerID",playerId);
+            console.log("playerID", playerId);
             if (playerId == gpHostId) {
                 console.log("hey ya !!");
                 var userTurn = salvos[i][j].turn;
@@ -708,34 +726,39 @@ function turnLogic() {
     } else if (enemyTurns.length > userTurns.length) {
         console.log("2.0", "yourTurn");
         waitingTurn = 0;
-    } else if (enemyTurns.length === userTurns.length && howCreatedTheGame == 0) {
+    } else if (enemyTurns.length === userTurns.length && whoCreatedTheGame == 0) {
         console.log("3.0", "yourTurn");
         waitingTurn = 0;
-    } else if (enemyTurns.length === userTurns.length && howCreatedTheGame == 1) {
+    } else if (enemyTurns.length === userTurns.length && whoCreatedTheGame == 1) {
         console.log("4.0", "enemyTurn");
         waitingTurn = 1;
     }
 
     if (waitingTurn === 1) {
-        console.log("hola");
         $("#shoot").hide();
+        console.log("hola");
+        $('#table-grid-enemy').addClass("player-turn");
         $('#table-grid-enemy').on("click", function () {
             $("#block-div").show();
+            return false;
         });
     } else {
         $("#block-div").hide();
+        $('#table-grid-your').addClass("player-turn");
     }
 }
 
 function waitingForEnemy() {
-    
+
     var gameplayers = data.gameplayers;
     if (gameplayers.length < 2) {
         console.log("waiting for enemy");
+        $("#shoot").hide();
+        $('#table-grid-enemy tr td').addClass("player-turn");
         $('#table-grid-enemy').on("click", function () {
             $("#block-div").show();
-            $("#shoot").hide();
-        });    
+            return false;
+        });
     }
 }
 

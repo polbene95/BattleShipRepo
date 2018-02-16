@@ -65,9 +65,9 @@ public class SalvoApplication {
 			List<String> loc7 = Arrays.asList("H8", "H9");
 			List<String> loc8 = Arrays.asList("A1");
 
-			List<String> salvoLoc1 = Arrays.asList("H1","B5","G7");
+			List<String> salvoLoc1 = Arrays.asList("H1","H2","H4","H5");
 			List<String> salvoLoc2 = Arrays.asList("A8","A7","A6");
-			List<String> salvoLoc3 = Arrays.asList("D4","I1","E8");
+			List<String> salvoLoc3 = Arrays.asList("A1","H6","H7","H8");
 			List<String> salvoLoc4 = Arrays.asList("B3","C3","D3");
 
 			Salvo salvo1 = salvoRepository.save(new Salvo(salvoLoc1, gp1, 1));
@@ -84,10 +84,10 @@ public class SalvoApplication {
 			Ship s6 = shipRepository.save(new Ship("boat",loc6,gp2));
 			Ship s8 = shipRepository.save(new Ship("boat",loc8,gp2));
 
-			Score scoreGP1 = scoreRepository.save(new Score(1,p1, g1));
-			Score scoreGP2 = scoreRepository.save(new Score(0,p2, g1));
-			Score scoreGP3 = scoreRepository.save(new Score(1,p1, g2));
-			Score scoreGP4 = scoreRepository.save(new Score(0,p2, g2));
+//			Score scoreGP1 = scoreRepository.save(new Score(1,p1, g1));
+//			Score scoreGP2 = scoreRepository.save(new Score(0,p2, g1));
+//			Score scoreGP3 = scoreRepository.save(new Score(1,p1, g2));
+//			Score scoreGP4 = scoreRepository.save(new Score(0,p2, g2));
 //			Score scoreGP5 = scoreRepository.save(new Score(0.5,p1, g3));
 //			Score scoreGP6 = scoreRepository.save(new Score(0.5,p3, g3));
 
