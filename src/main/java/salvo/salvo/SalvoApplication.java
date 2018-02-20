@@ -35,10 +35,10 @@ public class SalvoApplication {
 	@Bean
 	public CommandLineRunner initData(PlayerRepository playerRepository,GameRepository gameRepository, GamePlayerRepository gamePlayerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository, ScoreRepository scoreRepository) {
 		return (args) -> {
-			Player p1 = playerRepository.save(new Player("j.bauer@ctu.gov", "777"));
-			Player p2 = playerRepository.save(new Player("c.obrian@ctu.gov", "777"));
-			Player p3 = playerRepository.save(new Player("t.almeida@ctu.gov", "777"));
-			Player p4 = playerRepository.save(new Player("d.palmer@whitehouse.gov", "777"));
+			Player p1 = playerRepository.save(new Player("j.bauer", "777"));
+			Player p2 = playerRepository.save(new Player("c.obrian", "777"));
+			Player p3 = playerRepository.save(new Player("t.almeida", "777"));
+			Player p4 = playerRepository.save(new Player("d.palmer", "777"));
 
 			List<Player> ppp = playerRepository.findByUserName("j.bauer@ctu.gov");
 			System.out.println(ppp);
@@ -131,8 +131,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/web/games.html").permitAll()
-				.antMatchers("/web/games.css").permitAll()
-				.antMatchers("/web/games.js").permitAll()
+				.antMatchers("/web/style/*").permitAll()
+				.antMatchers("/web/script/*").permitAll()
 				.antMatchers("/api/leaderboard").permitAll()
 				.antMatchers("/api/players").permitAll()
 				.antMatchers("/api/createGame").permitAll()

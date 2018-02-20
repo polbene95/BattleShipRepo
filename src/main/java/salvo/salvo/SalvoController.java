@@ -329,14 +329,40 @@ public class SalvoController {
         return enemySalvo;
     }
     @RequestMapping("/game_view/{gamePlayerId}")
-    public Map<String,Object> getGameMap (@PathVariable Long gamePlayerId, Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> getGameViewMap (@PathVariable Long gamePlayerId,
+                                                               Authentication authentication) {
+
+        boolean match = false;
+        if (authentication != null) {
+            String playerName = authentication.getName();
+
+                List<Player> playerList = playerRepo.findByUserName(playerName);
+                Player player = playerList.get(0);
+                Set<GamePlayer> gamePlayers = player.getGamePlayers();
+                for (GamePlayer gamePlayer : gamePlayers) {
+                    long id  = gamePlayer.getId();
+                    if (id == gamePlayerId) {
+                        match = true;
+                    }
+                }
+                if (match) {
+                    return new ResponseEntity<>(getGameMap(gamePlayerId), HttpStatus.CREATED);
+                } else {
+                    return new ResponseEntity<>(makeMap("STOP", "NO CHEATERS ALLOWED"), HttpStatus.FORBIDDEN);
+                }
+        } else {
+            return new ResponseEntity<>(makeMap("STOP", "NEED TO LOG IN"), HttpStatus.UNAUTHORIZED);
+        }
+    }
+    public Map<String,Object> getGameMap (Long gamePlayerId) {
         Map<String,Object> gamePlayerIdMap = gameViewInfo(gamePlayerRepo.getOne(gamePlayerId));
-            if (gamePlayerId != null && authentication != null) {
+            if (gamePlayerId != null) {
                 return gamePlayerIdMap;
             } else {
                 return null;
             }
     }
+
     @RequestMapping(path = "/games/players/{gamePlayerId}/ships" , method = RequestMethod.POST)
     public ResponseEntity<Map<String,Object>> createShips (@PathVariable Long gamePlayerId,
                                                            @RequestBody Set<Ship> ships,
