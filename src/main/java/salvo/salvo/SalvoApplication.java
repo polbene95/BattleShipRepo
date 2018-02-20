@@ -130,6 +130,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+				.antMatchers("/battleship-polbene.herokuapp.com/").permitAll()
 				.antMatchers("/web/games.html").permitAll()
 				.antMatchers("/web/style/*").permitAll()
 				.antMatchers("/web/script/*").permitAll()
