@@ -19,7 +19,7 @@ $(document).ready(function () {
     var previous = null;
     var current = null;
 
-    $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
+    $.getJSON("/api/game_view/" + gpID, function (json) {
         data = json;
          var gameId = data.id;
         console.log(data);
@@ -72,7 +72,7 @@ function getURL() {
 }
 
 function reloadApiGames() {
-    $.getJSON("http://localhost:8080/api/game_view/" + gpID, function (json) {
+    $.getJSON("/api/game_view/" + gpID, function (json) {
         data = json;
         //        $("#block-div").hide();
         //        crateGrid();
@@ -311,7 +311,7 @@ function waitingForOponent () {
         var button = document.createElement("button");
         $(button).addClass("btn").text("Back to Hall");
         $(button).on("click", function () {
-            window.location.href = "http://localhost:8080/web/games.html";
+            window.location.href = "/web/games.html";
         })
         $("#ended-game").append(button);
         $("#ended-game").show();

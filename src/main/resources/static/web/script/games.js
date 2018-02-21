@@ -3,7 +3,7 @@ $(document).ready(function () {
     $("#list-table").hide();
     mainPageNav();
 
-    $.getJSON("http://localhost:8080/api/leaderboard", function (json) {
+    $.getJSON("/api/leaderboard", function (json) {
         data = json;
         printList();
         $('#rank-table').show();
@@ -12,7 +12,7 @@ $(document).ready(function () {
             "order": [[1, "desc"]]
         });
     });
-    $.getJSON("http://localhost:8080/api/games", function (json) {
+    $.getJSON("/api/games", function (json) {
         data2 = json;
         printGameList();
         userLoged();
@@ -21,7 +21,7 @@ $(document).ready(function () {
 });
 
 function reloadApiGames() {
-    $.getJSON("http://localhost:8080/api/games", function (json) {
+    $.getJSON("/api/games", function (json) {
         data2 = json;
         //        printGameList();
         //        userLoged();
@@ -170,11 +170,11 @@ function printGameList() {
                 if (gameplayers == 2) {
                     if (host == user) {
                         button.setAttribute("class", "play btn");
-                        button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdHost);
+                        button.setAttribute("href", "/web/game.html?gp=" + gpIdHost);
                         button.innerHTML = "PLAY";
                     } else if (guest == user) {
                         button.setAttribute("class", "play btn");
-                        button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdGuest);
+                        button.setAttribute("href", "/web/game.html?gp=" + gpIdGuest);
                         button.innerHTML = "PLAY";
                     } else {
                         button.setAttribute("class", "play btn");
@@ -183,7 +183,7 @@ function printGameList() {
                 }
                 if (gameplayers == 1 && host == user) {
                     button.setAttribute("class", "play btn");
-                    button.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + gpIdHost);
+                    button.setAttribute("href", "/web/game.html?gp=" + gpIdHost);
                     button.innerHTML = "PLAY";
                 }
                 if (gameplayers == 1 && host !== user) {
@@ -207,12 +207,12 @@ function createGame() {
             console.log(response.gpId);
             var latestGamePlayerId = response.gpId;
 
-            window.location.href = "http://localhost:8080/web/game.html?gp=" + latestGamePlayerId;
+            window.location.href = "/web/game.html?gp=" + latestGamePlayerId;
             //            var games = data2.games;
             //            for (i = 0; i < games.length; i++) {
             //                for (j = 0; j < games[i].gameplayers.length; j++) {
             //                    var newGamePlayerId = games[games.length - 1].gameplayers[0].id;
-            //                    //                    createGameButton.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + newGamePlayerId);
+            //                    //                    createGameButton.setAttribute("href", "/web/game.html?gp=" + newGamePlayerId);
             //                    console.log(newGamePlayerId);
             //                }
             //            }
