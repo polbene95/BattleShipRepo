@@ -1,0 +1,145 @@
+/*Data table extra info hided*/
+
+#rank-table_info.datatables_info,
+#list-table_info.datatables_info,
+#list-table_filter.datatables_length,
+#list-table_paginate,
+#list-table_length,
+#rank-table_filter.datatables_length,
+#rank-table_paginate,
+#rank-table_length,
+#rank-table_filter.datatables_length,
+#rank-table_filter {
+    display: none;
+}
+
+table.dataTable thead>tr>th.sorting_asc,
+table.dataTable thead>tr>th.sorting_desc,
+table.dataTable thead>tr>th.sorting,
+table.dataTable thead>tr>td.sorting_asc,
+table.dataTable thead>tr>td.sorting_desc,
+table.dataTable thead>tr>td.sorting {
+    padding-right: 0;
+}
+
+.main-container {
+    background-image: url(background1.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+    padding-bottom: 25px;
+}
+.container {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    border-bottom: solid;
+    font-size: 25px;
+    padding-top: 5px;
+}
+
+tr {
+    display: flex;
+    /*    justify-content: space-around;*/
+}
+
+td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 50px;
+    border-style: ridge;
+    padding: 0;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 5px 0;
+}
+
+.login {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1% 0;
+}
+
+#logout-form {
+    display: flex;
+    justify-content: space-between;
+    margin: 1% 0 0 0;
+}
+
+#welcome-txt {
+    font-size: 25px;
+}
+
+.nav-buttons {
+    display: flex;
+}
+
+.rank-games {
+    margin: 0 0 0 3px;
+}
+
+#logoutbut {
+    height: 34px;
+}
+
+.dropdown-toggle {
+    width: 46px;
+    height: 34px;
+}
+
+.play {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header {
+    border-radius: 25px;
+    border: solid;
+    margin-top: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.top-header {
+    border-bottom: solid;
+    display: flex;
+    justify-content: center;
+}
+
+.top-header h1 {
+    font-size: 36px;
+    font-family: 'Ewert', cursive;
+}
+
+.bot-header {
+    padding: 0 25px;
+}
+
+.body-info {
+    background-color: rgba(255, 255, 255, 0.7);
+    border: solid;
+    margin-top: 20px;
+    border-radius: 25px;
+    min-height: 460px;
+}
+
+.table-bordered, .table-bordered tr {
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+}
+td {
+    border: none;
+}
