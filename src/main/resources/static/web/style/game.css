@@ -1,6 +1,23 @@
+.main-container {
+    background-image: url(imatges/background-battle1.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    min-height: 100vh;
+    padding-bottom: 25px;
+}
+
+.header-bot {
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 15px 0;
+}
+
 .title {
     display: flex;
     justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 #players {
@@ -17,10 +34,18 @@ h2 {
     justify-content: space-around;
 }
 
-#table-grid-your {}
+#table-grid-your tr td,
+#table-grid-enemy tr td {
+    display: flex;
+    width: 50px;
+    height: 50px;
+    border-style: ridge;
+    color: lightblue;
+}
 
 table {
     border-spacing: 0;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 tr {
@@ -30,23 +55,11 @@ tr {
 
 td {
     display: flex;
-    /*
-    justify-content: center;
-    align-items: center;
-*/
     width: 50px;
     height: 50px;
     border-style: ridge;
     color: lightblue;
 }
-
-
-/*
-td:hover {
-    color: black;
-    background-color: aquamarine;
-}
-*/
 
 .selected-cell {
     width: 50px;
@@ -81,6 +94,10 @@ td:hover {
     background-color: brown;
     color: transparent;
 }
+.ship-location .pInBack {
+        z-index: -1;
+}
+
 
 .ship-location: hover {
     color: black;
@@ -91,8 +108,19 @@ td:hover {
     color: transparent;
 }
 
+.shotted .pInBack {
+    z-index: -1;
+}
+
 .succ-Shot {
-    background: red;
+    background-color: transparent;
+    background-image: url(imatges/skull-icon.png);
+    background-size: contain;
+    color: transparent;
+}
+
+.succ-Shot .pInBack {
+    z-index: -1;
     color: transparent;
 }
 
@@ -101,9 +129,14 @@ td:hover {
     color: transparent;
 }
 
+.fail_Shot .pInBack {
+    z-index: -1;
+}
+
 .header_header {
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
 }
 
 #place-ship {
@@ -147,7 +180,7 @@ td:hover {
 
 .pInBack {
     font-size: 160%;
-    z-index: -1;
+    /*    z-index: -1;*/
     width: 100%;
     height: 50px;
     display: flex;
@@ -167,7 +200,9 @@ td:hover {
     height: 390px;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
+
 
 /*
 #ended-game p {
@@ -177,68 +212,12 @@ td:hover {
 }
 */
 
-#block-div {
-    display: flex;
-    justify-content: center;
-    align-content: center;
+.player-turn .pInBack {
+    z-index: -1;
 }
 
-#block-div div {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 40%;
-    font: 50px bold red;
-    background-color: lightcoral;
-    border: dotted red;
-    animation-name: blink-warning;
-    animation-duration: 1s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    -webkit-animation-name: blink-warning;
-    -webkit-animation-duration: 1s;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-iteration-count: infinite;
-}
-
-@-moz-keyframes blink-warning {
-    0% {
-        opacity: 1.0;
-    }
-    50% {
-        opacity: 0.0;
-    }
-    100% {
-        opacity: 1.0;
-    }
-}
-
-@-webkit-keyframes blink-warning {
-    0% {
-        opacity: 1.0;
-    }
-    50% {
-        opacity: 0.0;
-    }
-    100% {
-        opacity: 1.0;
-    }
-}
-
-@keyframes blink-warning {
-    0% {
-        opacity: 1.0;
-    }
-    50% {
-        opacity: 0.0;
-    }
-    100% {
-        opacity: 1.0;
-    }
-}
-.player-turn{
-     
-animation-name: blink-grid;
+.player-turn {
+    animation-name: blink-grid;
     animation-duration: 1s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;

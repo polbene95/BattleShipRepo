@@ -23,7 +23,7 @@ table.dataTable thead>tr>td.sorting {
 }
 
 .main-container {
-    background-image: url(imatges/background1.jpg);
+    background-image: url(imatges/background-harbour3.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -51,16 +51,33 @@ td {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 200px;
+    width: 150px !important;
     height: 50px;
     border-style: ridge;
     padding: 0;
+    border: 0 !important;
+    
 }
 
 .body {
     display: flex;
     justify-content: center;
     padding: 10px 0 5px 0;
+    height: 400px;
+    overflow: overlay;
+}
+.body::-webkit-scrollbar {
+    width: 1em;
+}
+ 
+.body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+.body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+    border-radius: 25px;
 }
 
 .login {
@@ -127,19 +144,22 @@ header {
 }
 
 .body-info {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.3);
     border: solid;
     margin-top: 20px;
     border-radius: 25px;
     min-height: 460px;
 }
 
-.table-bordered, .table-bordered tr {
+.table-bordered {
     border-top-style: none;
     border-left-style: none;
     border-right-style: none;
     border-bottom-style: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 25px;
 }
-td {
-    border: none;
+.table-bordered thead {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7)
 }
+

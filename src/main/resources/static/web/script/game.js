@@ -128,13 +128,7 @@ function crateGrid() {
             colE.id = "E" + alphabet[i] + numbers[j];
             parU.innerHTML = alphabet[i] + numbers[j];
             parE.innerHTML = alphabet[i] + numbers[j];
-            //            for (k = 0; k < ships.length; k++) {
-            //                for (l = 0; l < ships[k].location.length; l++) {
-            //                    if (ships[k].location[l] == alphabet[i] + numbers[j]) {
-            //                        colU.setAttribute("class", "ship-location");
-            //                    }
-            //                }
-            //            }
+          
         }
         yourGrid.appendChild(rowU);
         enemyGrid.appendChild(rowE);
@@ -303,11 +297,12 @@ function getAllPositions() {
 
     }
 }
+
 function waitingForOponent () {
     
     if (data.gameplayers.length != 2) {
-        
-        $("#ended-game p").text("While we waiting for start that battle lets keep outside, let our soldiers prepare everything").css({"font-size": "25px", "opacity": "0.8", "z-index": "1"});
+        $(".table-div").hide();
+        $("#ended-game p").text("While we are waiting for a start to let the battle out, let's keep at the harbor, let our soldiers prepare everything, once the battleship is ready for the fight, we will let you know it to begin").css({"font-size": "25px", "opacity": "0.8", "z-index": "1"});
         var button = document.createElement("button");
         $(button).addClass("btn").text("Back to Hall");
         $(button).on("click", function () {
@@ -473,19 +468,21 @@ function displaySalvos() {
                 if (salvos[i][j].player == data.gpid) {
                     var myShots = slavoLocation[k];
                     $("#E" + myShots).addClass("shotted");
-                    //                    console.log(myShots);
+                 
                 }
                 if (salvos[i][j].player !== data.gpid) {
                     var enemyShot = slavoLocation[k];
                     if ($("#U" + enemyShot).hasClass("ship-location")) {
+                       
                         $("#U" + enemyShot).addClass("succ-Shot");
                     }
-                    if (!$("#U" + enemyShot).hasClass("ship-location")) {
+                    if ($("#U" + enemyShot).hasClass("ship-location") == false) {
                         $("#U" + enemyShot).addClass("fail-Shot")
+                  
                     }
 
                 }
-                //                console.log(slavoLocation);
+                
             }
         }
     }
@@ -610,6 +607,7 @@ function getHits() {
             for (var j = 0; j < everyRound.length; j++) {
                 var succHit = everyRound[j];
                 $("#E" + succHit).addClass("succ-shot");
+//                $("#E" + succHit).removeClass("shotted");
 
             }
         }
@@ -651,6 +649,7 @@ function showSunk() {
             $("#clean-grid").hide();
             $("#shoot").hide();
             $("#ended-game").show();
+            $(".table-div").hide();
             if (sunkNumHost.length == 4) {
 
                 $("#ended-game p").text("You Lose").css({"font-size":"200px","opacity": "1","z-index": "1"});
@@ -719,51 +718,34 @@ function turnLogic() {
 
     var waitingTurn;
     if (enemyTurns.length < userTurns.length) {
-        console.log("1.0", "enemyTurn");
+        
         waitingTurn = 1;
     } else if (enemyTurns.length > userTurns.length) {
-        console.log("2.0", "yourTurn");
+       
         waitingTurn = 0;
     } else if (enemyTurns.length === userTurns.length && whoCreatedTheGame == 0) {
-        console.log("3.0", "yourTurn");
+        
         waitingTurn = 0;
     } else if (enemyTurns.length === userTurns.length && whoCreatedTheGame == 1) {
-        console.log("4.0", "enemyTurn");
+        
         waitingTurn = 1;
     }
-    console.log(waitingTurn);
+    
 
     if (waitingTurn === 1) {
         $("#shoot").hide();
-        console.log("enemyturn");
         $('#table-grid-your').removeClass("player-turn");
         $('#table-grid-enemy').addClass("player-turn");
-        //        $('#table-grid-enemy').on("click", function () {
-        //            //            $("#block-div").show();
-        //
-        //            return false;
-        //        });
-        //        if(data.gameplayers["0"].score != null || data.gameplayers["1"].score != null) {
-        //            reloadApiGames();
-        //        }
         showSunk();
         setTimeout(reloadApiGames, 1000);
     } else {
-        console.log("myturn")
         $("#block-div").hide();
         $("#shoot").show();
         $('#table-grid-enemy').removeClass("player-turn");
         $('#table-grid-your').addClass("player-turn");
-        //                $('#table-grid-enemy td').on("click", function () {
-        //         
-        //                     return true;
-        //                });
         shotSalvos();
         showSunk();
 
-        //        if(data.gameplayers["0"].score != null || data.gameplayers["1"].score != null) {
-        //            reloadApiGames();
-        //        }
 
     }
 }

@@ -14,8 +14,12 @@ $(document).ready(function () {
     });
     $.getJSON("/api/games", function (json) {
         data2 = json;
+        console.log(data2);
+        if (data2.games != null && data2.player != null) {
+            
         printGameList();
         userLoged();
+        }
     })
     //    reloadApiGames();
 });
