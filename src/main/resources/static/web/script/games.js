@@ -2,12 +2,12 @@ $(document).ready(function () {
     $("#logout-form").hide();
     $("#list-table").hide();
     mainPageNav();
-    
+
     $.getJSON("http://localhost:8080/api/leaderboard", function (json) {
         data = json;
         printList();
         $('#rank-table').show();
-//        $('#games-button').hide();
+        //        $('#games-button').hide();
         $('#rank-table').DataTable({
             "order": [[1, "desc"]]
         });
@@ -17,14 +17,14 @@ $(document).ready(function () {
         printGameList();
         userLoged();
     })
-//    reloadApiGames();
+    //    reloadApiGames();
 });
 
 function reloadApiGames() {
     $.getJSON("http://localhost:8080/api/games", function (json) {
         data2 = json;
-//        printGameList();
-//        userLoged();
+        //        printGameList();
+        //        userLoged();
     })
 }
 
@@ -45,7 +45,7 @@ function printList() {
             var col = document.createElement("td");
             var email = data[i].email;
             var score = data[i].gameplayers[j].score;
-            console.log("score",score);
+            console.log("score", score);
             if (data[i].gameplayers[j].score != null) {
 
                 totalScore += score;
@@ -70,12 +70,12 @@ function printList() {
             row.insertCell().innerHTML = loseNum;
             row.insertCell().innerHTML = tieNum;
         }
-//        console.log(score);
+        //        console.log(score);
         tbody.append(row);
     }
-//    console.log(winArr);
-//    console.log(loseArr);
-//    console.log(tieArr);
+    //    console.log(winArr);
+    //    console.log(loseArr);
+    //    console.log(tieArr);
 }
 
 function login() {
@@ -95,7 +95,7 @@ function login() {
             $("#logout-form").show();
             $("#list-table").show();
             window.location.reload();
-            
+
         })
         .fail(function () {
             alert("Invalid User or Password");
@@ -203,19 +203,21 @@ function printGameList() {
 function createGame() {
     var createGameButton = document.getElementById("create-game");
     $.post("/api/createGame")
-        .done(function () {
-            var games = data2.games;
-            for (i = 0; i < games.length; i++) {
-                for (j = 0; j < games[i].gameplayers.length; j++) {
-                    var newGamePlayerId = games[games.length - 1].gameplayers[0].id;
-                    var latestGamePlayerId = parseFloat(newGamePlayerId) + 1;
-                    window.location.href = "http://localhost:8080/web/game.html?gp=" + latestGamePlayerId;
-//                    createGameButton.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + newGamePlayerId);
-                    console.log(newGamePlayerId);
-                }
-            }
+        .done(function (response) {
+            console.log(response.gpId);
+            var latestGamePlayerId = response.gpId;
+
+            window.location.href = "http://localhost:8080/web/game.html?gp=" + latestGamePlayerId;
+            //            var games = data2.games;
+            //            for (i = 0; i < games.length; i++) {
+            //                for (j = 0; j < games[i].gameplayers.length; j++) {
+            //                    var newGamePlayerId = games[games.length - 1].gameplayers[0].id;
+            //                    //                    createGameButton.setAttribute("href", "http://localhost:8080/web/game.html?gp=" + newGamePlayerId);
+            //                    console.log(newGamePlayerId);
+            //                }
+            //            }
             reloadApiGames();
-//            location.reload();
+            //            location.reload();
             console.log("done");
 
         })
@@ -229,7 +231,7 @@ function userLoged() {
     if (data2.player !== null) {
         $(".login").hide();
         $("#logout-form").show();
-//        $("#list-table").show();
+        //        $("#list-table").show();
         $('#games-button').show();
         $('#list-table').hide();
 
@@ -251,6 +253,7 @@ function joinGame(gameId) {
         console.log("fail join");
     })
 }
+
 function mainPageNav() {
 
     $("#rank-button").on("click", function () {
@@ -259,7 +262,7 @@ function mainPageNav() {
         $("#list-table").hide();
         $("#rank-table").show();
     });
-    
+
     $("#games-button").on("click", function () {
         $(".title h1").text("");
         $(".title h1").text("List of Games");
