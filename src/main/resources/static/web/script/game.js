@@ -21,7 +21,7 @@ $(document).ready(function () {
 
     $.getJSON("/api/game_view/" + gpID, function (json) {
         data = json;
-         var gameId = data.id;
+        var gameId = data.id;
         console.log(data);
         turnLogic();
 
@@ -128,7 +128,7 @@ function crateGrid() {
             colE.id = "E" + alphabet[i] + numbers[j];
             parU.innerHTML = alphabet[i] + numbers[j];
             parE.innerHTML = alphabet[i] + numbers[j];
-          
+
         }
         yourGrid.appendChild(rowU);
         enemyGrid.appendChild(rowE);
@@ -279,7 +279,7 @@ function getAllPositions() {
             .done(function (response) {
                 console.log(ships);
                 console.log(response)
-//                alert("Ships added: " + ships);
+                //                alert("Ships added: " + ships);
                 $("#table-grid-enemy").show();
                 $("#players").show();
                 $("#place-ship").hide();
@@ -287,7 +287,7 @@ function getAllPositions() {
                 $("#drag2").hide();
                 $("#drag3").hide();
                 $("#drag4").hide();
-            window.location.reload();
+                window.location.reload();
                 waitingForOponent();
 
             })
@@ -298,13 +298,17 @@ function getAllPositions() {
     }
 }
 
-function waitingForOponent () {
-    
+function waitingForOponent() {
+
     if (data.gameplayers.length != 2) {
         $(".table-div").hide();
-        $("#ended-game p").text("While we are waiting for a start to let the battle out, let's keep at the harbor, let our soldiers prepare everything, once the battleship is ready for the fight, we will let you know it to begin").css({"font-size": "25px", "opacity": "0.8", "z-index": "1"});
+        $("#ended-game p").text("While we are waiting for a start to let the battle out, let's keep at the harbor, let our soldiers prepare everything, once the battleship is ready for the fight, we will let you know it to begin").css({
+            "font-size": "25px",
+            "opacity": "0.8",
+            "z-index": "1"
+        });
         var button = document.createElement("button");
-        $(button).addClass("btn").text("Back to Hall");
+        $(button).addClass("btn to-hall").text("Back to Hall");
         $(button).on("click", function () {
             window.location.href = "/web/games.html";
         })
@@ -387,9 +391,6 @@ function placeShip(ship) {
             //            $("#U" + verPos + ShipLoc).addClass("ship-location");
         }
     }
-
-    //    console.log(ShipLocations2);
-    //    console.log(ShipLocations);
     return ShipLocations;
 }
 
@@ -399,20 +400,38 @@ function rotateToHoriz(ship) {
 
     if (ship == "#drag1") {
         $("#drag1").width(245);
+        $("#drag1 .icon-ship").css({
+            "width": "20%",
+            "height": "100%"
+        });
     }
     if (ship == "#drag2") {
 
         $("#drag2").width(195);
+        $("#drag2 .icon-ship").css({
+            "width": "20%",
+            "height": "100%"
+        });
+
     }
     if (ship == "#drag3") {
 
         $("#drag3").width(145);
+        $("#drag3 .icon-ship").css({
+            "width": "20%",
+            "height": "100%"
+        });
     }
     if (ship == "#drag4") {
         $("#drag4").width(145);
+        $("#drag4 .icon-ship").css({
+            "width": "20%",
+            "height": "100%"
+        });
 
     }
     $(ship).height(45);
+
 
     $(".btnVert").show();
     $(".btnHori").hide();
@@ -422,17 +441,36 @@ function rotateToVert(ship) {
 
     if (ship == "#drag1") {
         $("#drag1").height(245);
+        $("#drag1 .icon-ship").css({
+            "width": "100%",
+            "height": "20%"
+        });
     }
     if (ship == "#drag2") {
 
         $("#drag2").height(195);
+        $("#drag3 .icon-ship").css({
+            "width": "100%",
+            "height": "20%"
+        });
+
     }
     if (ship == "#drag3") {
 
         $("#drag3").height(145);
+        $("#drag3 .icon-ship").css({
+            "width": "100%",
+            "height": "20%"
+        });
+
     }
     if (ship == "#drag4") {
         $("#drag4").height(145);
+        $("#drag4 .icon-ship").css({
+            "width": "100%",
+            "height": "20%"
+        });
+
     }
     $(ship).width(45);
 
@@ -468,21 +506,21 @@ function displaySalvos() {
                 if (salvos[i][j].player == data.gpid) {
                     var myShots = slavoLocation[k];
                     $("#E" + myShots).addClass("shotted");
-                 
+
                 }
                 if (salvos[i][j].player !== data.gpid) {
                     var enemyShot = slavoLocation[k];
                     if ($("#U" + enemyShot).hasClass("ship-location")) {
-                       
+
                         $("#U" + enemyShot).addClass("succ-Shot");
                     }
                     if ($("#U" + enemyShot).hasClass("ship-location") == false) {
                         $("#U" + enemyShot).addClass("fail-Shot")
-                  
+
                     }
 
                 }
-                
+
             }
         }
     }
@@ -555,9 +593,6 @@ function shotSalvos() {
         }
         //        }
     })
-    $("#clean-grid").on("click", function () {
-        window.location.reload();
-    })
 }
 
 
@@ -607,7 +642,7 @@ function getHits() {
             for (var j = 0; j < everyRound.length; j++) {
                 var succHit = everyRound[j];
                 $("#E" + succHit).addClass("succ-shot");
-//                $("#E" + succHit).removeClass("shotted");
+                //                $("#E" + succHit).removeClass("shotted");
 
             }
         }
@@ -640,23 +675,29 @@ function showSunk() {
     if (data.gameplayers != null) {
         if (sunkNumHost.length == 4 || sunkNumEnem.length == 4) {
 
-            $(".table-div").css({
-                'z-index': '-1'
-            })
-            $(".table-div").css({
-                'opacity': '0.3'
-            })
-            $("#clean-grid").hide();
-            $("#shoot").hide();
+//            $(".table-div").css({
+//                'z-index': '-1'
+//            })
+//            $(".table-div").css({
+//                'opacity': '0.3'
+//            })
             $("#ended-game").show();
             $(".table-div").hide();
             if (sunkNumHost.length == 4) {
 
-                $("#ended-game p").text("You Lose").css({"font-size":"200px","opacity": "1","z-index": "1"});
+                $("#ended-game p").text("You Lose").css({
+                    "font-size": "170px",
+                    "opacity": "1",
+                    "z-index": "1"
+                });
             }
             if (sunkNumEnem.length == 4) {
 
-                $("#ended-game p").text("You Win").css({"font-size":"200px","opacity": "1","z-index": "1"});
+                $("#ended-game p").text("You Win").css({
+                    "font-size": "200px",
+                    "opacity": "1",
+                    "z-index": "1"
+                });
             }
         }
     }
@@ -718,33 +759,44 @@ function turnLogic() {
 
     var waitingTurn;
     if (enemyTurns.length < userTurns.length) {
-        
+        console.log("hola1");
+
         waitingTurn = 1;
     } else if (enemyTurns.length > userTurns.length) {
-       
+        console.log("hola2");
+
         waitingTurn = 0;
     } else if (enemyTurns.length === userTurns.length && whoCreatedTheGame == 0) {
-        
+        console.log("hola3");
+
         waitingTurn = 0;
     } else if (enemyTurns.length === userTurns.length && whoCreatedTheGame == 1) {
-        
+        console.log("hola4");
+
         waitingTurn = 1;
     }
-    
+
 
     if (waitingTurn === 1) {
-        $("#shoot").hide();
+        console.log("hola5");
+        $("#shoot").removeClass("player-turn");
         $('#table-grid-your').removeClass("player-turn");
+        $('#table-grid-enemy').removeClass("player-wait");
+        $('#table-grid-your').addClass("player-wait");
         $('#table-grid-enemy').addClass("player-turn");
         showSunk();
         setTimeout(reloadApiGames, 1000);
-    } else {
-        $("#block-div").hide();
-        $("#shoot").show();
+    } 
+    if (waitingTurn === 0){
+//        $("#block-div").hide();
+        $("#shoot").addClass("player-turn");
         $('#table-grid-enemy').removeClass("player-turn");
+        $('#table-grid-your').removeClass("player-wait");
+        $('#table-grid-enemy').addClass("player-wait");
         $('#table-grid-your').addClass("player-turn");
+        console.log("hola6");
+        setTimeout(showSunk, 10);
         shotSalvos();
-        showSunk();
 
 
     }

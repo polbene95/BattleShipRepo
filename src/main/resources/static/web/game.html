@@ -4,74 +4,76 @@
 <head>
     <title>Ship Location!</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Ewert' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Mono' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="style/game.css">
 </head>
 
 <body>
-   <div class="main-container">
-    <div class="container">
-        <header>
-            <div class="header_header">
-                <a id="back-button" class="btn" onclick="backButton()">Back</a>
+    <div class="main-container">
+        <div class="container">
+            <header>
+                <div class="header_header">
+                    <a id="back-button" class="btn" onclick="backButton()"><span class="glyphicon glyphicon-share-alt"></span></a>
 
-                <div id="my-ships">
-                    <button class="btn" id="post-ship" onclick="getAllPositions()"> Ready </button>
-                    <button class="btn" id="shoot"> SHOOT EM UP </button>
-                    <button class="btn" id="clean-grid"> Clean Grid </button>
+                    <div id="my-ships">
+                        <button class="btn" id="post-ship" onclick="getAllPositions()"> Ready </button>
+                        <button class="btn" id="shoot"><img src="style/imatges/prate-canon-icon.png" alt="pirate canon"></button>
+<!--                        <button class="btn" id="clean-grid"> Clean Grid </button>-->
+                    </div>
+                </div>
+                <div class="header-bot">
+                    <div class="title">
+                        <h1>Ship Location</h1>
+                    </div>
+                    <div id="players"></div>
+                </div>
+            </header>
+            <div id="ended-game">
+                <p></p>
+            </div>
+            <div class="table-div">
+                <table id="table-grid-your" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </table>
+                <table id="table-grid-enemy"></table>
+                <div id="place-ship">
+                    <br>
+                    <br>
+                    <br>
+                    <div id="drag1" draggable="true" ondragstart="drag(event)">
+                        <button class="btn btnVert" onclick="rotateToVert('#drag1')"><span class="glyphicon glyphicon-refresh"></span></button>
+                        <button class="btn btnHori" onclick="rotateToHoriz('#drag1')"><span class="glyphicon glyphicon-refresh"></span></button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div id="drag2" draggable="true" ondragstart="drag(event)">
+                        <button class="btn btnVert" onclick="rotateToVert('#drag2')"><span class="glyphicon glyphicon-refresh"></span></button>
+                        <button class="btn btnHori" onclick="rotateToHoriz('#drag2')"><span class="glyphicon glyphicon-refresh"></span></button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div id="drag3" draggable="true" ondragstart="drag(event)">
+                        <button class="btn btnVert" onclick="rotateToVert('#drag3')"><span class="glyphicon glyphicon-refresh"></span></button>
+                        <button class="btn btnHori" onclick="rotateToHoriz('#drag3')"><span class="glyphicon glyphicon-refresh"></span></button>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div id="drag4" draggable="true" ondragstart="drag(event)">
+                        <button class="btn btnVert" onclick="rotateToVert('#drag4')"><span class="glyphicon glyphicon-refresh"></span></button>
+                        <button class="btn btnHori" onclick="rotateToHoriz('#drag4')"><span class="glyphicon glyphicon-refresh"></span></button>
+                    </div>
                 </div>
             </div>
-            <div class="header-bot">
-            <div class="title">
-                <h1>Ship Location</h1>
-            </div>
-            <div id="players"></div>
-            </div>
-        </header>
-        <div id="ended-game">
-            <p></p>
         </div>
-        <div class="table-div">
-            <table id="table-grid-your" ondrop="drop(event)" ondragover="allowDrop(event)">
-            </table>
-            <table id="table-grid-enemy"></table>
-            <div id="place-ship">
-               <br>
-               <br>
-               <br>
-                <div id="drag1" draggable="true" ondragstart="drag(event)">
-                    <button class="btn btnVert" onclick="rotateToVert('#drag1')"></button>
-                    <button class="btn btnHori" onclick="rotateToHoriz('#drag1')"></button>
-                </div>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <div id="drag2" draggable="true" ondragstart="drag(event)">
-                    <button class="btn btnVert" onclick="rotateToVert('#drag2')"></button>
-                    <button class="btn btnHori" onclick="rotateToHoriz('#drag2')"></button>
-                </div>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <div id="drag3" draggable="true" ondragstart="drag(event)">
-                    <button class="btn btnVert" onclick="rotateToVert('#drag3')"></button>
-                    <button class="btn btnHori" onclick="rotateToHoriz('#drag3')"></button>
-                </div>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <div id="drag4" draggable="true" ondragstart="drag(event)">
-                    <button class="btn btnVert" onclick="rotateToVert('#drag4')"></button>
-                    <button class="btn btnHori" onclick="rotateToHoriz('#drag4')"></button>
-                </div>
-            </div>
-        </div>
-    </div>
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

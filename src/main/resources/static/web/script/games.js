@@ -49,14 +49,12 @@ function printList() {
             var col = document.createElement("td");
             var email = data[i].email;
             var score = data[i].gameplayers[j].score;
-            console.log("score", score);
             if (data[i].gameplayers[j].score != null) {
 
                 totalScore += score;
                 if (score == 1) {
                     winArr.push(score);
                     winNum = winArr.length;
-                    console.log("imin");
                 }
                 if (score == 0) {
                     loseArr.push(score);
@@ -74,7 +72,7 @@ function printList() {
             row.insertCell().innerHTML = loseNum;
             row.insertCell().innerHTML = tieNum;
         }
-        //        console.log(score);
+       
         tbody.append(row);
     }
     //    console.log(winArr);

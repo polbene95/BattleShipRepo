@@ -5,6 +5,14 @@
     background-size: cover;
     min-height: 100vh;
     padding-bottom: 25px;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.header_header {
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.5);
+    /*    margin: 15px 0;*/
 }
 
 .header-bot {
@@ -14,15 +22,36 @@
     margin: 15px 0;
 }
 
+#my-ships {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+#post-ship{
+    width: 50%;
+    font-weight: bold;
+}
+#shoot {
+    width: 50%;
+}
+
+#shoot img {
+    width: 20%;
+}
+.to-hall{
+    font-weight: bold;
+}
+
 .title {
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    font-family: 'Ewert', cursive;
 }
 
 #players {
     display: flex;
     justify-content: space-around;
+    border-top: 1px solid rgba(255, 255, 255, 0.7);
 }
 
 h2 {
@@ -64,52 +93,36 @@ td {
 .selected-cell {
     width: 50px;
     height: 50px;
-    position: relative;
     opacity: 0.9;
-}
-
-.selected-cell:before,
-.selected-cell:after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    background: #d00;
-}
-
-.selected-cell:before {
-    left: 50%;
-    width: 30%;
-    margin-left: -15%;
-    height: 100%;
-}
-
-.selected-cell:after {
-    top: 50%;
-    height: 30%;
-    margin-top: -15%;
-    width: 100%;
+    background-image: url(imatges/bomb-icon.png);
+    background-size: contain;
 }
 
 .ship-location {
-    background-color: brown;
+    background-image: url(imatges/pirate-ship-icon.png);
+    background-size: contain;
     color: transparent;
 }
-.ship-location .pInBack {
-        z-index: -1;
-}
 
+.ship-location .pInBack {
+    z-index: -1;
+    color: transparent;
+}
 
 .ship-location: hover {
     color: black;
 }
 
 .shotted {
-    background: blue;
+    background-color: transparent;
+    background-image: url(imatges/water-icon.png);
+    background-size: contain;
     color: transparent;
 }
 
 .shotted .pInBack {
     z-index: -1;
+    color: transparent;
 }
 
 .succ-Shot {
@@ -125,12 +138,15 @@ td {
 }
 
 .fail-Shot {
-    background: blue;
+    background-color: transparent;
+    background-image: url(imatges/water-icon.png);
+    background-size: contain;
     color: transparent;
 }
 
-.fail_Shot .pInBack {
+.fail-Shot .pInBack {
     z-index: -1;
+    color: transparent;
 }
 
 .header_header {
@@ -149,6 +165,14 @@ td {
     padding: 0 2%;
 }
 
+.icon-ship {
+    z-index: -1;
+    background-image: url(imatges/pirate-ship-icon.png);
+    background-size: contain;
+    width: 20%;
+    height: 100%;
+}
+
 #drag1,
 #drag2,
 #drag3,
@@ -159,7 +183,23 @@ td {
     align-items: center;
     height: 45px;
     z-index: 1;
-    background-color: red;
+    background-color: black;
+    border-radius: 25px;
+    /*
+    background-image: url(imatges/pirate-ship-icon.png);
+    background-size: contain;
+*/
+}
+
+#drag2 .icon-ship {
+    width: 25%;
+    height: 100%;
+}
+
+#drag3 .icon-ship,
+#drag4 .icon-ship {
+    width: 33%;
+    height: 100%;
 }
 
 #drag1 {
@@ -178,9 +218,21 @@ td {
     /*    height: 145px;*/
 }
 
+.btnVert,
+.btnHori,
+.btn {
+    background-color: Transparent;
+}
+
+.btnVert span,
+.btnHori span {
+    color: white;
+    background-color: Transparent;
+}
+
 .pInBack {
     font-size: 160%;
-    /*    z-index: -1;*/
+    z-index: -1;
     width: 100%;
     height: 50px;
     display: flex;
@@ -193,14 +245,34 @@ td {
     display: none;
 }
 
+#back-button {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#back-button span {
+    color: black;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
 #ended-game {
-    position: absolute;
-    width: 85%;
+    width: 100%;
+    padding: 0 15px;
     display: flex;
     height: 390px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
 }
 
 
@@ -212,8 +284,58 @@ td {
 }
 */
 
+
+/*
 .player-turn .pInBack {
     z-index: -1;
+}
+*/
+
+.player-wait {
+    animation-name: static-grid;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: static-grid;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes static-grid {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes static-grid {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@keyframes static-grid {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 1.0;
+    }
+    100% {
+        opacity: 1.0;
+    }
 }
 
 .player-turn {
