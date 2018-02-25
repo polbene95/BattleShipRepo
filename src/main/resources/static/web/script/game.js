@@ -163,15 +163,46 @@ function printShips() {
             var thisPosition = alphabet[i] + numbers[j];
             for (k = 0; k < ships.length; k++) {
                 for (l = 0; l < ships[k].location.length; l++) {
-                    if (ships[k].location[l] == alphabet[i] + numbers[j]) {
-                        $("#U" + thisPosition).addClass("ship-location");
+                    var myActualCell = ships[k].location[l];
+                    var myFirstCell = ships[k].location[0];
+                    var mySecondCell = ships[k].location[1];
+                    if (myActualCell == thisPosition) {
+                        if (ships[k].type == "Destructor") {
+                            if (myFirstCell.charAt(0) == mySecondCell.charAt(0)) {
+                                $("#U" + thisPosition).addClass("ship-location DH" + l);
+                            } else {
+                                $("#U" + thisPosition).addClass("ship-location DV" + l)
+                            }
+                        }
+                        if (ships[k].type == "Cruiser") {
+                            if (myFirstCell.charAt(0) == mySecondCell.charAt(0)) {
+                                $("#U" + thisPosition).addClass("ship-location CH" + l);
+                            } else {
+                                $("#U" + thisPosition).addClass("ship-location CV" + l)
+                            }
+                        }
+                        if (ships[k].type == "Submarine") {
+                            if (myFirstCell.charAt(0) == mySecondCell.charAt(0)) {
+                                $("#U" + thisPosition).addClass("ship-location SH" + l);
+                            } else {
+                                $("#U" + thisPosition).addClass("ship-location SV" + l)
+                            }
+                        }
+                         if (ships[k].type == "Patrol Boat") {
+                            if (myFirstCell.charAt(0) == mySecondCell.charAt(0)) {
+                                $("#U" + thisPosition).addClass("ship-location PH" + l);
+                            } else {
+                                $("#U" + thisPosition).addClass("ship-location PV" + l)
+                            }
+                        }
                     }
                 }
             }
         }
-
     }
 }
+//myActualCell.charAt(0) == myActualCellNext.charAt(0) ||
+
 
 function getAllPositions() {
 
@@ -336,7 +367,7 @@ function placeShip(ship) {
 
             ShipLocations.push(rowLocShip + ShipLocat);
             ShipLocations2.push("U" + rowLocShip + ShipLocat);
-            //            $("#U" + rowLocShip + ShipLocat).addClass("ship-location");
+//            $("#U" + rowLocShip + ShipLocat).addClass("ship-location HD" + i);
 
         }
         ////////////////CRUISER HOR/////////////////
@@ -346,7 +377,7 @@ function placeShip(ship) {
 
             ShipLocations.push(rowLocShip + ShipLocat);
             ShipLocations2.push("U" + rowLocShip + ShipLocat);
-            //            $("#U" + rowLocShip + ShipLocat).addClass("ship-location");
+//            $("#U" + rowLocShip + ShipLocat).addClass("ship-location HC" + i);
         }
         //////////////SUBMARINE AND PETROL BOAT HOR///////////////
     } else if ($(ship).width() == 145) {
@@ -355,7 +386,7 @@ function placeShip(ship) {
 
             ShipLocations.push(rowLocShip + ShipLocat);
             ShipLocations2.push("U" + rowLocShip + ShipLocat);
-            //            $("#U" + rowLocShip + ShipLocat).addClass("ship-location");
+//            $("#U" + rowLocShip + ShipLocat).addClass("ship-location HS" + i);
         }
         ////////////////////////DESTRUCTOR VER///////////////////
     } else if ($(ship).height() == 245) {
@@ -366,7 +397,7 @@ function placeShip(ship) {
 
             ShipLocations.push(verPos + ShipLoc);
             ShipLocations2.push("U" + verPos + ShipLoc);
-            //            $("#U" + verPos + ShipLoc).addClass("ship-location");
+//            $("#U" + rowLocShip + ShipLocat).addClass("ship-location VD" + i);
         }
         ////////////////////////CRUISER VER//////////////////////
     } else if ($(ship).height() == 195) {
@@ -377,7 +408,7 @@ function placeShip(ship) {
 
             ShipLocations.push(verPos + ShipLoc);
             ShipLocations2.push("U" + verPos + ShipLoc);
-            //            $("#U" + verPos + ShipLoc).addClass("ship-location");
+//            $("#U" + rowLocShip + ShipLocat).addClass("ship-location VC" + i);
         }
         //////////////////SUBMARINE AND PETROL BOAT VER///////////////
     } else if ($(ship).height() == 145) {
@@ -388,7 +419,7 @@ function placeShip(ship) {
 
             ShipLocations.push(verPos + ShipLoc);
             ShipLocations2.push("U" + verPos + ShipLoc);
-            //            $("#U" + verPos + ShipLoc).addClass("ship-location");
+//            $("#U" + rowLocShip + ShipLocat).addClass("ship-location VS" + i);
         }
     }
     return ShipLocations;
@@ -556,7 +587,10 @@ function shotSalvos() {
             var char1 = select.charAt(1);
             var char2 = select.charAt(2);
             var toPush = char1 + char2;
-            yourShots.splice(toPush, 1);
+            var index = yourShots.indexOf(toPush)
+            if (index > -1) {   
+                yourShots.splice(index,1);
+            }
         }
         console.log(yourShots);
 
@@ -675,12 +709,12 @@ function showSunk() {
     if (data.gameplayers != null) {
         if (sunkNumHost.length == 4 || sunkNumEnem.length == 4) {
 
-//            $(".table-div").css({
-//                'z-index': '-1'
-//            })
-//            $(".table-div").css({
-//                'opacity': '0.3'
-//            })
+            //            $(".table-div").css({
+            //                'z-index': '-1'
+            //            })
+            //            $(".table-div").css({
+            //                'opacity': '0.3'
+            //            })
             $("#ended-game").show();
             $(".table-div").hide();
             if (sunkNumHost.length == 4) {
@@ -779,23 +813,23 @@ function turnLogic() {
 
     if (waitingTurn === 1) {
         console.log("hola5");
-        $("#shoot").removeClass("player-turn");
+//        $("#shoot").removeClass("player-turn");
         $('#table-grid-your').removeClass("player-turn");
         $('#table-grid-enemy').removeClass("player-wait");
         $('#table-grid-your').addClass("player-wait");
         $('#table-grid-enemy').addClass("player-turn");
         showSunk();
         setTimeout(reloadApiGames, 1000);
-    } 
-    if (waitingTurn === 0){
-//        $("#block-div").hide();
-        $("#shoot").addClass("player-turn");
+    }
+    if (waitingTurn === 0) {
+        //        $("#block-div").hide();
+//        $("#shoot").addClass("player-turn");
         $('#table-grid-enemy').removeClass("player-turn");
         $('#table-grid-your').removeClass("player-wait");
         $('#table-grid-enemy').addClass("player-wait");
         $('#table-grid-your').addClass("player-turn");
         console.log("hola6");
-        setTimeout(showSunk, 10);
+        setTimeout(showSunk, 1000);
         shotSalvos();
 
 

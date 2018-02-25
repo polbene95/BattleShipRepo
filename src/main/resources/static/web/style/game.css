@@ -32,11 +32,13 @@
     font-weight: bold;
 }
 #shoot {
-    width: 50%;
+    width: 100%;
 }
 
 #shoot img {
-    width: 20%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 125px;
 }
 .to-hall{
     font-weight: bold;
@@ -171,6 +173,11 @@ td {
     background-size: contain;
     width: 20%;
     height: 100%;
+}
+.button-shoot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #drag1,
@@ -339,6 +346,7 @@ td {
 }
 
 .player-turn {
+    background-color: #bebfba;
     animation-name: blink-grid;
     animation-duration: 1s;
     animation-timing-function: linear;
